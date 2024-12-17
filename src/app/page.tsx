@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { FaXTwitter, FaLinkedinIn, FaGithub, FaRegEnvelope, FaInstagram, FaFacebookF } from "react-icons/fa6";
+import { FaLinkedinIn, FaGithub, FaRegEnvelope } from "react-icons/fa6";
 
 export default function Home() {
   return (
@@ -39,18 +39,7 @@ export default function Home() {
                 className="text-gray-600 hover:text-gray-900 transition-colors">
                 <FaLinkedinIn className="w-7 h-7" />
               </Link>
-              <Link href="https://twitter.com/0xugurcaneser" target="_blank" rel="noopener noreferrer"
-                className="text-gray-600 hover:text-gray-900 transition-colors">
-                <FaXTwitter className="w-7 h-7" />
-              </Link>
-              <Link href="https://instagram.com/0xugurcaneser" target="_blank" rel="noopener noreferrer"
-                className="text-gray-600 hover:text-gray-900 transition-colors">
-                <FaInstagram className="w-7 h-7" />
-              </Link>
-              <Link href="https://facebook.com/0xugurcaneser" target="_blank" rel="noopener noreferrer"
-                className="text-gray-600 hover:text-gray-900 transition-colors">
-                <FaFacebookF className="w-7 h-7" />
-              </Link>
+             
             </div>
           </div>
         </div>
