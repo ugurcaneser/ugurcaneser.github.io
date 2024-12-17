@@ -10,8 +10,8 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Web'de Güzel Bir Yer",
-  description: "Modern ve minimal tasarımlarla dijital dünyada fark yaratın.",
+  title: "Uğurcan Eser",
+  description: "Uğurcan Eser's Personal Website",
 };
 
 export default function RootLayout({

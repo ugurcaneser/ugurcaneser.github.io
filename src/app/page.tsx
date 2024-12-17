@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { FaXTwitter, FaLinkedinIn, FaGithub } from "react-icons/fa6";
+import { FaXTwitter, FaLinkedinIn, FaGithub, FaRegEnvelope, FaInstagram, FaFacebookF } from "react-icons/fa6";
 
 export default function Home() {
   return (
@@ -27,6 +27,10 @@ export default function Home() {
 
             {/* Social Media Icons */}
             <div className="flex space-x-5">
+            <Link href="mailto:ugurcaneser@yahoo.com" target="_blank" rel="noopener noreferrer"
+                className="text-gray-600 hover:text-gray-900 transition-colors">
+                <FaRegEnvelope className="w-7 h-7" />
+              </Link>
               <Link href="https://github.com/ugurcaneser" target="_blank" rel="noopener noreferrer"
                 className="text-gray-600 hover:text-gray-900 transition-colors">
                 <FaGithub className="w-7 h-7" />
@@ -38,6 +42,14 @@ export default function Home() {
               <Link href="https://twitter.com/0xugurcaneser" target="_blank" rel="noopener noreferrer"
                 className="text-gray-600 hover:text-gray-900 transition-colors">
                 <FaXTwitter className="w-7 h-7" />
+              </Link>
+              <Link href="https://instagram.com/0xugurcaneser" target="_blank" rel="noopener noreferrer"
+                className="text-gray-600 hover:text-gray-900 transition-colors">
+                <FaInstagram className="w-7 h-7" />
+              </Link>
+              <Link href="https://facebook.com/0xugurcaneser" target="_blank" rel="noopener noreferrer"
+                className="text-gray-600 hover:text-gray-900 transition-colors">
+                <FaFacebookF className="w-7 h-7" />
               </Link>
             </div>
           </div>
