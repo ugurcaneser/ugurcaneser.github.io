@@ -1,4 +1,7 @@
 import { getSortedPostsData } from "../lib/posts";
+import { format } from 'date-fns';
+import { tr } from 'date-fns/locale';
+import Link from 'next/link';
 
 interface PostData {
     id: string;
@@ -18,18 +21,14 @@ export default async function Blog() {
                     <article key={id} className="p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
                         <h2 className="text-2xl font-semibold mb-2">{title}</h2>
                         <time className="text-gray-500 text-sm mb-4 block">
-                            {new Date(date).toLocaleDateString('tr-TR', {
-                                year: 'numeric',
-                                month: 'long',
-                                day: 'numeric'
-                            })}
+                            {format(new Date(date), 'dd MMMM yyyy', { locale: tr })}
                         </time>
                         <p className="text-gray-700 mb-4">
                             {content.substring(0, 150)}...
                         </p>
-                        <a href={`/posts/${id}`} className="text-blue-600 hover:text-blue-800">
+                        <Link href={`/blog/${id}`} className="text-blue-600 hover:text-blue-800">
                             Read more →
-                        </a>
+                        </Link>
                     </article>
                 ))}
             </div>

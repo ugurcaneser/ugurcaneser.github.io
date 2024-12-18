@@ -36,10 +36,6 @@ export async function getSortedPostsData(): Promise<PostData[]> {
     
     // Sort posts by date
     return allPostsData.sort((a, b) => {
-        if (new Date(a.date) < new Date(b.date)) {
-            return 1;
-        } else {
-            return -1;
-        }
+        return b.date.localeCompare(a.date);
     });
 }
