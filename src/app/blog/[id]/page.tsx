@@ -1,12 +1,21 @@
 import { format } from 'date-fns';
 import { tr } from 'date-fns/locale';
 import { getSortedPostsData } from '../../lib/posts';
+import { Metadata } from 'next';
 
-interface PostData {
-    id: string;
-    title: string;
-    date: string;
-    content: string;
+export async function generateMetadata({ 
+    params 
+}: { 
+    params: Promise<{ id: string }> 
+}): Promise<Metadata> {
+    const { id } = await params;
+    const posts = await getSortedPostsData();
+    const post = posts.find((p) => p.id === id);
+
+    return {
+        title: post?.title || 'Blog Post',
+        description: post?.content.substring(0, 160) || 'Blog post content',
+    };
 }
 
 export async function generateStaticParams() {
@@ -16,9 +25,14 @@ export async function generateStaticParams() {
     }));
 }
 
-export default async function BlogPost({ params }: { params: { id: string } }) {
+export default async function BlogPost({ 
+    params 
+}: { 
+    params: Promise<{ id: string }> 
+}) {
+    const { id } = await params;
     const posts = await getSortedPostsData();
-    const post = posts.find((p) => p.id === params.id);
+    const post = posts.find((p) => p.id === id);
 
     if (!post) {
         return <div>Post not found</div>;
@@ -28,7 +42,7 @@ export default async function BlogPost({ params }: { params: { id: string } }) {
         <article className="container mx-auto px-4 py-8 max-w-2xl">
             <h1 className="text-4xl font-bold mb-4">{post.title}</h1>
             <time className="text-gray-500 text-sm mb-8 block">
-                {format(new Date(post.date), 'dd MMMM yyyy', { locale: tr })}
+                {format(new Date(post.date), 'dd MMMM yyyy, HH:mm', { locale: tr })}
             </time>
             <div className="prose prose-lg">
                 {post.content}

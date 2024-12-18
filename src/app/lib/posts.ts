@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 
-interface PostData {
+export interface PostData {
     id: string;
     date: string;
     title: string;

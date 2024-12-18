@@ -1,17 +1,10 @@
-import { getSortedPostsData } from "../lib/posts";
+import { getSortedPostsData, PostData } from "../lib/posts";
 import { format } from 'date-fns';
 import { tr } from 'date-fns/locale';
 import Link from 'next/link';
 
-interface PostData {
-    id: string;
-    date: string;
-    title: string;
-    content: string;
-}
-
 export default async function Blog() {
-    const allPostsData = await getSortedPostsData();
+    const allPostsData: PostData[] = await getSortedPostsData();
     
     return (
         <div className="container mx-auto px-4 py-8">
@@ -21,7 +14,7 @@ export default async function Blog() {
                     <article key={id} className="p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
                         <h2 className="text-2xl font-semibold mb-2">{title}</h2>
                         <time className="text-gray-500 text-sm mb-4 block">
-                            {format(new Date(date), 'dd MMMM yyyy', { locale: tr })}
+                            {format(new Date(date), 'dd MMMM yyyy, HH:mm', { locale: tr })}
                         </time>
                         <p className="text-gray-700 mb-4">
                             {content.substring(0, 150)}...
