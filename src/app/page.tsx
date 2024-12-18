@@ -22,7 +22,8 @@ export default function Home() {
               Hi, I&apos;m <span className='text-red-600'>Uğurcan</span> 
             </h1>
             <p className="text-xl text-gray-600 mb-8 font-extralight">
-              🚀 An experienced professional specializing in Mobile App Development and Data Science.
+              🚀 An experienced professional specializing in
+              <span className='text-red-600'> software development</span>.
             </p>
 
             {/* Social Media Icons */}
