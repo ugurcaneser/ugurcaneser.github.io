@@ -10,6 +10,7 @@ export default function Home() {
           <div className="text-xl font-bold text-gray-800">👋</div>
           <div className="space-x-6">
             <Link href="./blog" className="text-gray-600 hover:text-gray-900">Blog</Link>
+            <Link href="./gallery" className="text-gray-600 hover:text-gray-900">Gallery</Link>
           </div>
         </nav>
       </header>
