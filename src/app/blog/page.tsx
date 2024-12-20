@@ -2,16 +2,21 @@ import { getSortedPostsData, PostData } from "../lib/posts";
 import { format } from 'date-fns';
 import { tr } from 'date-fns/locale';
 import Link from 'next/link';
+import { FaHouse } from "react-icons/fa6";
+
 
 export default async function Blog() {
     const allPostsData: PostData[] = await getSortedPostsData();
     
     return (
         <div className="container mx-auto px-4 py-8">
-            <h1 className="text-3xl font-bold mb-8">Blog Posts</h1>
+            <Link href="/" className="text-2xl text-red-600 hover:text-red-800 mb-4 inline-block">
+            <FaHouse />
+            </Link>
+            <h1 className="text-3xl font-bold mb-8 text-center">Blog Posts</h1>
             <div className="grid gap-6">
                 {allPostsData.map(({ id, date, title, content }) => (
-                    <article key={id} className="p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                    <article key={id} className="p-6 bg-white rounded-lg text-black shadow-md hover:shadow-lg transition-shadow">
                         <h2 className="text-2xl font-semibold mb-2">{title}</h2>
                         <time className="text-gray-500 text-sm mb-4 block">
                             {format(new Date(date), 'dd MMMM yyyy, HH:mm', { locale: tr })}
@@ -19,7 +24,7 @@ export default async function Blog() {
                         <p className="text-gray-700 mb-4">
                             {content.substring(0, 150)}...
                         </p>
-                        <Link href={`/blog/${id}`} className="text-blue-600 hover:text-blue-800">
+                        <Link href={`/blog/${id}`} className="text-red-600 hover:text-red-800">
                             Read more →
                         </Link>
                     </article>

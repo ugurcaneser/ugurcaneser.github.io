@@ -2,6 +2,8 @@
 
 import Image from 'next/image';
 import { useState } from 'react';
+import Link from 'next/link';
+import { FaHouse } from "react-icons/fa6";
 
 const photos = [
     {
@@ -32,6 +34,9 @@ export default function Gallery() {
 
     return (
         <div className="container mx-auto px-4 py-8">
+            <Link href="/" className="text-2xl text-red-600 hover:text-red-800 mb-4 inline-block">
+                <FaHouse />
+            </Link>
             <h1 className="text-4xl font-bold mb-8 text-center">Photos</h1>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {photos.map((photo) => (
