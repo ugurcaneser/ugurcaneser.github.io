@@ -52,7 +52,7 @@ export default function Home() {
         <div className="container mx-auto px-6 py-20">
           <div className="max-w-3xl text-left">
           <motion.h1 
-              className="text-6xl font-bold text-gray-900 mb-6 sm:leading-tight leading-tight"
+              className="text-6xl font-bold text-black mb-6 sm:leading-tight leading-tight"
               variants={slideIn}
               initial="hidden"
               animate="show"
@@ -73,7 +73,7 @@ export default function Home() {
               {' '}HI! I&apos;M <span className='text-red-600'>UĞURCAN</span> 
             </motion.h1>
             <motion.p 
-              className="text-xl text-red-600 mb-8 font-bold"
+              className="text-xl text-black mb-8 font-bold"
               variants={slideIn}
               initial="hidden"
               animate="show"
