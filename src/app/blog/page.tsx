@@ -13,7 +13,7 @@ export default async function Blog() {
             <Link href="/" className="text-2xl text-red-600 hover:text-red-800 mb-4 inline-block">
             <FaHouse />
             </Link>
-            <h1 className="text-3xl font-bold mb-8 text-center">Blog Posts</h1>
+            <h1 className="text-3xl font-bold mb-8 text-center">BLOG</h1>
             <div className="grid gap-6">
                 {allPostsData.map(({ id, date, title, content }) => (
                     <article key={id} className="p-6 bg-white rounded-lg text-black shadow-md hover:shadow-lg transition-shadow">

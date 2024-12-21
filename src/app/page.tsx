@@ -57,7 +57,20 @@ export default function Home() {
               initial="hidden"
               animate="show"
             >
-              HI , I&apos;M <span className='text-red-600'>UĞURCAN</span> 
+              <motion.span
+                animate={{
+                  rotate: [0, 20, -20, 20, 0],
+                }}
+                transition={{
+                  duration: 1.5,
+                  repeat: Infinity,
+                  repeatDelay: 1,
+                }}
+                style={{ display: 'inline-block', transformOrigin: '70% 70%' }}
+              >
+                👋
+              </motion.span>
+              {' '}HI! I&apos;M <span className='text-red-600'>UĞURCAN</span> 
             </motion.h1>
             <motion.p 
               className="text-xl text-red-600 mb-8 font-bold"

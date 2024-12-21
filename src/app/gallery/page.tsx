@@ -37,7 +37,7 @@ export default function Gallery() {
             <Link href="/" className="text-2xl text-red-600 hover:text-red-800 mb-4 inline-block">
                 <FaHouse />
             </Link>
-            <h1 className="text-4xl font-bold mb-8 text-center">Photos</h1>
+            <h1 className="text-4xl font-bold mb-8 text-center">GALLERY</h1>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {photos.map((photo) => (
                     <div 
