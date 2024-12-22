@@ -1,5 +1,3 @@
-import { format } from 'date-fns';
-import { enUS } from 'date-fns/locale';
 import { getSortedPostsData } from '../../lib/posts';
 import { Metadata } from 'next';
 import ClientBlogPost from './ClientBlogPost';
