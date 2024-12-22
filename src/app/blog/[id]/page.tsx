@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import { tr } from 'date-fns/locale';
+import { enUS } from 'date-fns/locale';
 import { getSortedPostsData } from '../../lib/posts';
 import { Metadata } from 'next';
 
@@ -42,7 +42,7 @@ export default async function BlogPost({
         <article className="container mx-auto px-4 py-8 max-w-2xl">
             <h1 className="text-4xl font-bold mb-4">{post.title}</h1>
             <time className="text-gray-500 text-sm mb-8 block">
-                {format(new Date(post.date), 'dd MMMM yyyy, HH:mm', { locale: tr })}
+                {format(new Date(post.date), 'MMMM dd, yyyy', { locale: enUS })}
             </time>
             <div className="prose prose-lg">
                 {post.content}

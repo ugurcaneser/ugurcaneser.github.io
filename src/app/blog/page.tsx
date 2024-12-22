@@ -1,6 +1,6 @@
 import { getSortedPostsData, PostData } from "../lib/posts";
 import { format } from 'date-fns';
-import { tr } from 'date-fns/locale';
+import { enUS } from 'date-fns/locale';
 import Link from 'next/link';
 import { FaHandPointLeft } from "react-icons/fa6";
 
@@ -19,12 +19,12 @@ export default async function Blog() {
                     <article key={id} className="p-6 bg-white rounded-lg text-black shadow-md hover:shadow-lg transition-shadow">
                         <h2 className="text-2xl font-semibold mb-2">{title}</h2>
                         <time className="text-gray-500 text-sm mb-4 block">
-                            {format(new Date(date), 'dd MMMM yyyy, HH:mm', { locale: tr })}
+                            {format(new Date(date), 'MMMM dd, yyyy', { locale: enUS })}
                         </time>
                         <p className="text-gray-700 mb-4">
                             {content.substring(0, 150)}...
                         </p>
-                        <Link href={`/blog/${id}`} className="text-red-600 hover:text-red-800">
+                        <Link href={`/blog/${id}`} className="text-red-600 hover:text-red-900">
                             Read more →
                         </Link>
                     </article>
