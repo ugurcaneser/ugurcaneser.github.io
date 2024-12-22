@@ -16,7 +16,7 @@ export default async function Blog() {
             <h1 className="text-3xl font-bold mb-8 text-center">BLOG</h1>
             <div className="grid gap-6">
                 {allPostsData.map(({ id, date, title, content }) => (
-                    <article key={id} className="p-6 bg-white rounded-lg text-black shadow-md hover:shadow-lg transition-shadow">
+                    <article key={id} className="p-6 bg-white rounded-lg text-black transition-shadow">
                         <h2 className="text-2xl font-semibold mb-2">{title}</h2>
                         <time className="text-gray-500 text-sm mb-4 block">
                             {format(new Date(date), 'MMMM dd, yyyy', { locale: enUS })}
