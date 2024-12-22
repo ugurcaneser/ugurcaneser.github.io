@@ -8,6 +8,7 @@ Welcome to my personal portfolio website repository! This website showcases my p
 - **Styling**: [Tailwind CSS](https://tailwindcss.com/)
 - **Typography**: Poppins font family
 - **Icons**: React Icons
+- **Blog**: [React Markdown](https://github.com/remarkjs/react-markdown) with [remark-gfm](https://github.com/remarkjs/remark-gfm)
 - **Deployment**: GitHub Pages
 
 ## 🛠️ Local Development
@@ -36,7 +37,9 @@ Then open [http://localhost:3000](http://localhost:3000) in your browser to see 
 ├── src/
 │   ├── app/            # Next.js app directory
 │   │   ├── page.tsx    # Homepage
-│   │   ├── blog/       # Blog posts
+│   │   ├── blog/       # Blog posts and rendering components
+│   │   │   └── [id]/   # Dynamic blog post routes
+│   │   ├── lib/        # Utility functions
 │   │   └── layout.tsx  # Root layout
 │   └── components/     # Reusable components
 ├── public/            # Static assets
