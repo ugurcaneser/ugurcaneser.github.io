@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { useState } from 'react';
 import Link from 'next/link';
-import { FaHouse } from "react-icons/fa6";
+import { FaHandPointLeft, FaXmark } from "react-icons/fa6";
 
 const photos = [
     {
@@ -35,7 +35,7 @@ export default function Gallery() {
     return (
         <div className="container mx-auto px-4 py-8">
             <Link href="/" className="text-2xl text-red-600 hover:text-red-800 mb-4 inline-block">
-                <FaHouse />
+                <FaHandPointLeft />
             </Link>
             <h1 className="text-4xl font-bold mb-8 text-center">GALLERY</h1>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -57,13 +57,22 @@ export default function Gallery() {
                 ))}
             </div>
 
-            {/* Modal */}
-            {selectedPhoto && (
+                   {/* Modal */}
+                   {selectedPhoto && (
                 <div 
-                    className="fixed inset-0 bg-black/80 flex items-center justify-center z-[1000] p-4"
+                    className="fixed inset-0 bg-black/80 flex items-center justify-center z-[9999]"
                     onClick={() => setSelectedPhoto(null)}
                 >
-                    <div className="relative w-full h-full max-w-5xl max-h-[90vh]">
+                                        <div className="relative w-full h-full max-w-5xl max-h-[90vh] mx-2 md:mx-4">
+                        <button
+                            className="absolute right-0 md:-right-12 top-0 z-[10000] text-white bg-black/50 p-2 rounded-lg md:rounded-lg hover:bg-black/70 transition-colors"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setSelectedPhoto(null);
+                            }}
+                        >
+                            <FaXmark size={24} />
+                        </button>
                         <Image
                             src={selectedPhoto.src}
                             alt={selectedPhoto.alt}

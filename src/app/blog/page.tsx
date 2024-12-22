@@ -2,7 +2,7 @@ import { getSortedPostsData, PostData } from "../lib/posts";
 import { format } from 'date-fns';
 import { tr } from 'date-fns/locale';
 import Link from 'next/link';
-import { FaHouse } from "react-icons/fa6";
+import { FaHandPointLeft } from "react-icons/fa6";
 
 
 export default async function Blog() {
@@ -11,7 +11,7 @@ export default async function Blog() {
     return (
         <div className="container mx-auto px-4 py-8">
             <Link href="/" className="text-2xl text-red-600 hover:text-red-800 mb-4 inline-block">
-            <FaHouse />
+            <FaHandPointLeft />
             </Link>
             <h1 className="text-3xl font-bold mb-8 text-center">BLOG</h1>
             <div className="grid gap-6">
