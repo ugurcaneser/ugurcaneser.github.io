@@ -2,7 +2,6 @@
 title: "Hello!"
 date: "December 22, 2024"
 ---
-
 Hello, curious wanderer! 🎉  
 
 You’ve stumbled upon my shiny new blog, where I plan to share my thoughts, experiments, and maybe even a few questionable jokes. Think of this space as a mix of a coffee shop chat, a brainstorming session, and a virtual adventure all rolled into one.
