@@ -1,4 +1,4 @@
-# Personal Portfolio Website
+# Personal Website
 
 Welcome to my personal portfolio website repository! This website showcases my professional experience, projects, and blog posts about Mobile App Development and Data Science.
 
@@ -45,12 +45,24 @@ Then open [http://localhost:3000](http://localhost:3000) in your browser to see 
 ├── public/            # Static assets
 └── tailwind.config.ts # Tailwind CSS configuration
 ```
+## 📝 Blog Page
 
-## 🔗 Connect with Me
+The blog page of this website presents a collection of blog posts with the following features:
 
-- GitHub: [@ugurcaneser](https://github.com/ugurcaneser)
-- LinkedIn: [ugurcaneser](https://linkedin.com/in/ugurcaneser)
-- Twitter: [@0xugurcaneser](https://twitter.com/0xugurcaneser)
+- **Data Fetching**: Utilizes an asynchronous function to fetch and sort blog post data.
+- **Responsive Design**: Styled with Tailwind CSS for a clean and responsive layout.
+- **Navigation**: Includes a link to return to the homepage, enhanced with React Icons.
+- **Post Display**: Each post is displayed with a title, publication date, and a content snippet, arranged in a grid format for easy navigation and reading.
+
+## 📸 Gallery Page
+
+The gallery page of this website showcases a collection of photos using the following technologies:
+
+- **Image Handling**: Utilizes Next.js `Image` component for optimized image loading.
+- **Navigation**: Uses Next.js `Link` component for seamless client-side transitions.
+- **Icons**: Features icons from the `react-icons/fa6` package for interactive elements.
+
+Each photo is displayed with specific dimensions to ensure a consistent layout and appearance across devices.
 
 ## 📄 License
 
