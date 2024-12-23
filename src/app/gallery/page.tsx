@@ -27,6 +27,55 @@ const photos = [
         width: 5712,
         height: 4284
     },
+    {
+        id: 4,
+        src: '/images/gallery/photo1.jpg',
+        alt: 'Photo 4',
+        width: 4096,
+        height: 3072
+    },
+    {
+        id: 5,
+        src: '/images/gallery/photo2.jpg',
+        alt: 'Photo 5',
+        width: 4032,
+        height: 2268
+    },
+    {
+        id: 6,
+        src: '/images/gallery/photo3.jpg',
+        alt: 'Photo 6',
+        width: 3024,
+        height: 4032
+    },
+    {
+        id: 7,
+        src: '/images/gallery/photo1.jpg',
+        alt: 'Photo 7',
+        width: 4032,
+        height: 3024
+    },
+    {
+        id: 8,
+        src: '/images/gallery/photo2.jpg',
+        alt: 'Photo 8',
+        width: 4032,
+        height: 3024
+    },
+    {
+        id: 9,
+        src: '/images/gallery/photo3.jpg',
+        alt: 'Photo 9',
+        width: 4096,
+        height: 3072
+    },
+    {
+        id: 10,
+        src: '/images/gallery/photo3.jpg',
+        alt: 'Photo 10',
+        width: 4096,
+        height: 3072
+    },
 ];
 
 export default function Gallery() {
