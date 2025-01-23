@@ -5,11 +5,12 @@ import { motion } from 'framer-motion'
 
 export default function Home() {
   const links = [
+    { href: "./projects", text: "PROJECTS" },
     { href: "mailto:ugurcaneser@yahoo.com", text: "CONTACT" },
     { href: "https://github.com/ugurcaneser", text: "GITHUB" },
     { href: "https://linkedin.com/in/ugurcaneser", text: "LINKEDIN" },
     { href: "./blog", text: "BLOG" },
-    { href: "./gallery", text: "GALLERY" }
+    { href: "./gallery", text: "GALLERY" },
   ];
 
   const container = {
@@ -79,7 +80,7 @@ export default function Home() {
               animate="show"
               transition={{ delay: 0.3 }}
             >
-              SOFTWARE DEVELOPER
+              DEVELOPER
             </motion.p>
 
             {/* Social Media Icons */}
