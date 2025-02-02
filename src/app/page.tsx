@@ -71,7 +71,7 @@ export default function Home() {
               >
                 👋
               </motion.span>
-              {' '}HI! I&apos;M <span className='text-red-600'>UĞURCAN</span> 
+              {' '}HI! I&apos;M UĞURCAN 
             </motion.h1>
             <motion.p 
               className="text-xl text-black mb-8 font-bold"
@@ -80,7 +80,7 @@ export default function Home() {
               animate="show"
               transition={{ delay: 0.3 }}
             >
-              DEVELOPER
+              SOFTWARE ENGINEER
             </motion.p>
 
             {/* Social Media Icons */}
