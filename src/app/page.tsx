@@ -9,7 +9,7 @@ export default function Home() {
     { href: "mailto:ugurcaneser@yahoo.com", text: "CONTACT" },
     { href: "https://github.com/ugurcaneser", text: "GITHUB" },
     { href: "https://linkedin.com/in/ugurcaneser", text: "LINKEDIN" },
-    { href: "./blog", text: "BLOG" },
+    // { href: "./blog", text: "BLOG" },
     { href: "./gallery", text: "GALLERY" },
   ];
 
