@@ -10,7 +10,6 @@ interface Project {
   type: 'mobile' | 'game';
   link: string;
   appStoreLink?: string;
-  blogLink?: string;
 }
 
 const projects: Project[] = [
@@ -21,10 +20,8 @@ const projects: Project[] = [
     icon: '/images/project_icons/budgetory.png',
     type: 'mobile',
     link: '/projects/project1',
-    appStoreLink: 'https://apps.apple.com/tr/app/budgetory/id6740176453', // App Store link will be added later
-    blogLink: '#' // Blog link will be added later
+    appStoreLink: 'https://apps.apple.com/tr/app/budgetory/id6740176453',
   },
-  // Diğer projeler buraya eklenecek
 ];
 
 export default function Projects() {
@@ -43,35 +40,26 @@ export default function Projects() {
                 className="rounded-lg"
               />
             </div>
-            <h2 className="text-xl font-semibold mb-2">{project.title}</h2>
-            <p className="text-gray-600 dark:text-gray-300">{project.description}</p>
+            <h2 className="text-xl text-center font-semibold mb-2">{project.title}</h2>
+            <p className="text-gray-600 dark:text-gray-300 text-center">{project.description}</p>
             <div className="mt-4 space-y-3">
-              <span className={`inline-block px-3 py-1 rounded-full text-sm ${
-                project.type === 'mobile' 
+              <div className="flex justify-center">
+                <span className={`inline-block px-3 py-1 rounded-full text-sm ${project.type === 'mobile'
                   ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
                   : 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200'
-              }`}>
-                {project.type === 'mobile' ? 'Mobile App' : 'Game'}
-              </span>
-              <div className="flex gap-2 pt-2">
+                  }`}>
+                  {project.type === 'mobile' ? 'Mobile App' : 'Game'}
+                </span>
+              </div>
+              <div className="flex justify-center gap-2 pt-2">
                 {project.appStoreLink && (
                   <a
                     href={project.appStoreLink}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex-1 bg-black text-white px-4 py-2 rounded-lg text-center"
+                    className="bg-black text-white px-16 py-2 rounded-lg text-center"
                   >
                     App Store
-                  </a>
-                )}
-                {project.blogLink && (
-                  <a
-                    href={project.blogLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg text-center"
-                  >
-                    Technical Blog
                   </a>
                 )}
               </div>
