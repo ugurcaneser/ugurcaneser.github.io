@@ -80,7 +80,7 @@ export default function Home() {
               animate="show"
               transition={{ delay: 0.3 }}
             >
-              SOFTWARE ENGINEER
+              SOFTWARE DEVELOPER
             </motion.p>
 
             {/* Social Media Icons */}
