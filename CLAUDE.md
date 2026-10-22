@@ -35,6 +35,8 @@ Schemas are in `src/content.config.ts`; helpers in `src/lib/content.ts`.
 - **Posts**: `src/content/posts/<lang>/<slug>.{md,mdx}`. Entry id is `"<lang>/<slug>"`; language and slug are derived from it (`postLang`, `postSlug`). Same slug in both folders = translations (linked automatically). Always fetch posts via `getPosts(lang?)`, which sorts newest-first and filters drafts outside dev.
 - **Projects**: `src/content/projects/<id>.yaml` with bilingual `description` and link `label`s; posts reference them with `project: <id>` (`reference('projects')`). Icons sit next to the YAML and go through `astro:assets` `<Image>`.
 - **Tags** are free-form strings per post and per language; URLs use `tagSlug()` which folds Turkish characters (ı, ş, ğ…).
+- **Post images** shared by both language versions go in `src/assets/posts/<project>/` and are referenced relatively (`../../../assets/posts/<project>/x.png`) so `astro:assets` optimizes them.
+- Posts about the user's other projects are written with the user-level `tech-blog` skill (`~/.claude/skills/tech-blog/SKILL.md`), which covers research, verification and the hand-over.
 
 ### Code blocks and theming
 

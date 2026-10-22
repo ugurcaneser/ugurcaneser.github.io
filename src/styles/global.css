@@ -169,6 +169,15 @@ a:hover {
 	margin: 1.5em 0;
 }
 
+/* On wide screens code blocks and images break out of the text column, so
+   long lines (e.g. ASCII level maps) fit without scrolling. */
+@media (min-width: 58rem) {
+	.prose .expressive-code,
+	.prose p:has(> img:only-child) {
+		margin-inline: -3.5rem;
+	}
+}
+
 .prose table {
 	display: block;
 	width: 100%;

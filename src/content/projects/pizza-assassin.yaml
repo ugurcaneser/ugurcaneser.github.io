@@ -1,0 +1,12 @@
+name: Pizza Assassin
+icon: ./pizza-assassin.png
+description:
+  en: A comedic pixel-art stealth platformer for iPhone, iPad and Android, built with Godot.
+  tr: Godot ile geliştirilmiş, iPhone, iPad ve Android için komik bir pixel-art gizlilik platform oyunu.
+links:
+  - label: { en: Website, tr: Web sitesi }
+    url: https://ugurcaneser.github.io/pizza-assassin-site/
+  - label: { en: Privacy policy, tr: Gizlilik politikası }
+    url: https://ugurcaneser.github.io/pizza-assassin-site/privacy/
+  - label: { en: Support, tr: Destek }
+    url: https://ugurcaneser.github.io/pizza-assassin-site/support/
