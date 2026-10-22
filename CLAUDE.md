@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Commands
 
-Node ≥ 22.23.4 is required by Astro 7 (`.nvmrc` says `22`; run `nvm use` first).
+Node ≥ 22.23.4 is required by Astro 7 (pinned in `.nvmrc` and in `deploy.yml`, keep them in sync; run `nvm use` first).
 
 ```bash
 npm run dev       # dev server at http://localhost:4321 (drafts are visible here only)

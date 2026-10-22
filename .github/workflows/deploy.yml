@@ -22,7 +22,7 @@ jobs:
       # Runs `npm run build` (astro check + astro build) and uploads dist/.
       - uses: withastro/action@v6
         with:
-          node-version: 22
+          node-version: 22.23.4 # keep in sync with .nvmrc
 
   deploy:
     needs: build
