@@ -174,6 +174,35 @@ a:hover {
 	margin: 1.5em 0;
 }
 
+/* Expressive Code's copy button is 2.5rem and always shown on touch screens,
+   which dwarfs 13px code. Keep a 2.25rem tap target, but draw a 1.75rem
+   button with a 1rem icon inside it. */
+.prose .expressive-code .copy button {
+	width: 2.25rem;
+	height: 2.25rem;
+}
+
+.prose .expressive-code .copy button div,
+.prose .expressive-code .copy button::before {
+	inset: 0.25rem;
+}
+
+.prose .expressive-code .copy button::after {
+	margin: 0.625rem;
+}
+
+/* Fade the icon instead of the whole button, whose background covers the
+   code that runs under it. */
+@media (hover: none) {
+	.prose .expressive-code .copy button {
+		opacity: 1;
+	}
+
+	.prose .expressive-code .copy button::after {
+		opacity: 0.6;
+	}
+}
+
 .prose table {
 	display: block;
 	overflow-x: auto;
