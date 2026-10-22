@@ -42,24 +42,7 @@ for (const other of langs.filter((l) => l !== lang)) {
 ---
 
 <Base lang={lang} title={t('tags.tagged', { tag: name })} translations={translations}>
-	<header class="page-head">
-		<p class="label">{t('nav.tags')}</p>
-		<h1 class="display">{name}</h1>
-	</header>
-	<aside class="page-rail rail-after">
-		<a class="label" href={localizePath(lang, '/tags/')}>← {t('tags.all')}</a>
-	</aside>
-	<div class="page-body">
-		<PostList lang={lang} posts={posts} />
-	</div>
+	<h1 class="page-title">{t('tags.tagged', { tag: name })}</h1>
+	<p class="page-description"><a href={localizePath(lang, '/tags/')}>{t('tags.all')}</a></p>
+	<PostList lang={lang} posts={posts} />
 </Base>
-
-<style>
-	.page-head .label {
-		margin-bottom: 0.75rem;
-	}
-
-	.page-rail a {
-		text-decoration: none;
-	}
-</style>

@@ -1,8 +1,10 @@
 name: Budgetory
-icon: ./budgetory.png
+icon: ./budgetory/icon.png
 description:
-  en: An iOS app for tracking your budget easily.
-  tr: Bütçeni kolayca takip etmen için bir iOS uygulaması.
+  en: A personal finance app. Record income and expenses in any of 15 currencies and see your balance, trends and spending by category.
+  tr: Kişisel finans uygulaması. Gelir ve giderlerini 15 para biriminde kaydet; bakiyeni, eğilimleri ve kategorilere göre harcamalarını gör.
+platforms: [iOS, Android]
+stack: [Expo, React Native, TypeScript, FastAPI]
 links:
   - label: { en: App Store, tr: App Store }
     url: https://apps.apple.com/tr/app/budgetory/id6740176453

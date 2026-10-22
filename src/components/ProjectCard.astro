@@ -1,0 +1,99 @@
+---
+import { Image } from 'astro:assets';
+import { type Lang, localizePath } from '../i18n';
+import type { Project } from '../lib/content';
+
+interface Props {
+	lang: Lang;
+	project: Project;
+	/** Show the description under the name. */
+	detailed?: boolean;
+	/** Extra line under the platforms, e.g. a post count. */
+	note?: string;
+}
+
+const { lang, project, detailed = false, note } = Astro.props;
+const { name, icon, description, platforms } = project.data;
+---
+
+<a class:list={['card', { detailed }]} href={localizePath(lang, `/projects/${project.id}/`)}>
+	{
+		icon ? (
+			<Image class="icon" src={icon} alt="" width={detailed ? 64 : 48} height={detailed ? 64 : 48} densities={[1, 2]} />
+		) : (
+			<span class="icon placeholder" aria-hidden="true">
+				{name[0]}
+			</span>
+		)
+	}
+	<span class="text">
+		<span class="name">{name}</span>
+		{platforms.length > 0 && <span class="muted small">{platforms.join(' · ')}</span>}
+		{detailed && <span class="muted description">{description[lang]}</span>}
+		{note && <span class="muted small">{note}</span>}
+	</span>
+</a>
+
+<style>
+	.card {
+		display: flex;
+		align-items: center;
+		gap: 0.875rem;
+		padding: 0.75rem;
+		border: 1px solid var(--border);
+		border-radius: 0.75rem;
+		background: var(--bg-raised);
+		text-decoration: none;
+	}
+
+	.card:hover {
+		border-color: var(--muted);
+	}
+
+	.detailed {
+		align-items: flex-start;
+		gap: 1rem;
+		padding: 1rem;
+	}
+
+	.icon {
+		flex: none;
+		width: 48px;
+		height: 48px;
+		border-radius: 22%;
+	}
+
+	.detailed .icon {
+		width: 64px;
+		height: 64px;
+	}
+
+	.placeholder {
+		display: grid;
+		place-items: center;
+		background: var(--border);
+		font-weight: 600;
+	}
+
+	.text {
+		display: flex;
+		flex-direction: column;
+		gap: 0.125rem;
+		min-width: 0;
+		line-height: 1.4;
+	}
+
+	.name {
+		font-weight: 600;
+	}
+
+	.small {
+		font-size: 0.8125rem;
+	}
+
+	.description {
+		margin: 0.25rem 0;
+		font-size: 0.9375rem;
+		line-height: 1.5;
+	}
+</style>

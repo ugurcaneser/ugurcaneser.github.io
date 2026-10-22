@@ -1,8 +1,26 @@
 name: Pizza Assassin
-icon: ./pizza-assassin.png
+icon: ./pizza-assassin/icon.png
 description:
-  en: A comedic pixel-art stealth platformer for iPhone, iPad and Android, built with Godot.
-  tr: Godot ile geliştirilmiş, iPhone, iPad ve Android için komik bir pixel-art gizlilik platform oyunu.
+  en: A comedic pixel-art stealth platformer. Sneak up, strike from behind and deliver the pizza while it's still hot.
+  tr: Komik bir pixel-art gizlilik platform oyunu. Sinsice yaklaş, arkadan vur ve pizzayı daha sıcakken teslim et.
+platforms: [iPhone, iPad, Android]
+stack: [Godot 4.7, GDScript]
+banner:
+  en: ./pizza-assassin/banner-en.png
+  tr: ./pizza-assassin/banner-tr.png
+screenshots:
+  - en: ./pizza-assassin/shot-1_sneak-en.png
+    tr: ./pizza-assassin/shot-1_sneak-tr.png
+    alt: { en: Sneaking up on a rival courier, tr: Rakip bir kuryeye sinsice yaklaşmak }
+  - en: ./pizza-assassin/shot-2_backstab-en.png
+    tr: ./pizza-assassin/shot-2_backstab-tr.png
+    alt: { en: Striking a rival from behind, tr: Bir rakibe arkadan vurmak }
+  - en: ./pizza-assassin/shot-4_hotel-en.png
+    tr: ./pizza-assassin/shot-4_hotel-tr.png
+    alt: { en: Hiding in a pizza box from the night watchman, tr: Gece bekçisinden pizza kutusunda saklanmak }
+  - en: ./pizza-assassin/shot-5_chandelier-en.png
+    tr: ./pizza-assassin/shot-5_chandelier-tr.png
+    alt: { en: Bringing a chandelier down on the guards, tr: Avizeyi nöbetçilerin tepesine indirmek }
 links:
   - label: { en: Website, tr: Web sitesi }
     url: https://ugurcaneser.github.io/pizza-assassin-site/

@@ -22,66 +22,173 @@ interface Props {
 
 const { lang, project } = Astro.props;
 const t = useTranslations(lang);
-const { name, icon, description, links } = project.data;
+const { name, icon, description, platforms, stack, banner, screenshots, links } = project.data;
 const posts = (await getPosts(lang)).filter((post) => post.data.project?.id === project.id);
 const translations = Object.fromEntries(langs.map((l) => [l, localizePath(l, `/projects/${project.id}/`)]));
 ---
 
-<Base lang={lang} title={name} description={description[lang]} translations={translations}>
-	<header class="page-head">
-		{icon && <Image class="icon" src={icon} alt="" width={88} height={88} densities={[1, 2]} />}
-		<h1 class="display">{name}</h1>
-		<p class="lede">{description[lang]}</p>
+<Base
+	lang={lang}
+	title={name}
+	description={description[lang]}
+	translations={translations}
+	image={banner?.[lang] ?? icon}
+>
+	{
+		banner && (
+			<Image
+				class="banner bleed"
+				src={banner[lang]}
+				alt=""
+				widths={[640, 1024]}
+				sizes="(min-width: 64rem) 54rem, 100vw"
+				loading="eager"
+			/>
+		)
+	}
+
+	<header>
+		{icon && <Image class="icon" src={icon} alt="" width={72} height={72} densities={[1, 2]} />}
+		<div>
+			<h1>{name}</h1>
+			<p class="muted small">{[...platforms, ...stack].join(' · ')}</p>
+		</div>
 	</header>
+
+	<p class="description">{description[lang]}</p>
+
 	{
 		links.length > 0 && (
-			<aside class="page-rail">
-				<h2 class="label">{t('projects.links')}</h2>
-				<ul>
-					{links.map((link) => (
+			<ul class="links">
+				{links.map((link) => (
+					<li>
+						<a href={link.url}>{link.label[lang]}</a>
+					</li>
+				))}
+			</ul>
+		)
+	}
+
+	{
+		screenshots.length > 0 && (
+			<>
+				<h2 class="section-title">{t('projects.screenshots')}</h2>
+				<ul class="shots bleed">
+					{screenshots.map((shot) => (
 						<li>
-							<a href={link.url}>{link.label[lang]} ↗</a>
+							<Image src={shot[lang]} alt={shot.alt[lang]} widths={[480, 960]} sizes="(min-width: 48rem) 27rem, 80vw" />
 						</li>
 					))}
 				</ul>
-			</aside>
+			</>
 		)
 	}
-	<section class="page-body" aria-labelledby="project-posts">
-		<h2 class="label heading" id="project-posts">{t('projects.posts')}</h2>
-		<PostList lang={lang} posts={posts} hideProject />
-	</section>
+
+	<h2 class="section-title">{t('projects.posts')}</h2>
+	<PostList lang={lang} posts={posts} hideProject />
 </Base>
 
 <style>
-	.icon {
+	.banner {
 		display: block;
-		margin-bottom: 1.25rem;
-		border-radius: 1.25rem;
+		width: 100%;
+		height: auto;
+		margin-top: 1rem;
+		border-radius: 0.75rem;
 	}
 
-	.page-rail {
-		display: grid;
-		gap: 0.75rem;
-		align-content: start;
+	header {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		margin-top: 2rem;
 	}
 
-	.page-rail ul {
+	.icon {
+		flex: none;
+		border-radius: 22%;
+	}
+
+	h1 {
+		margin: 0;
+		font-size: 1.75rem;
+		font-weight: 600;
+		line-height: 1.2;
+		letter-spacing: -0.015em;
+	}
+
+	.small {
+		margin: 0.25rem 0 0;
+		font-size: 0.875rem;
+	}
+
+	.description {
+		margin: 1.5rem 0 1rem;
+	}
+
+	.links {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.5rem 1.25rem;
+		gap: 0.5rem;
 		margin: 0;
 		padding: 0;
 		list-style: none;
 	}
 
-	.heading {
-		margin-bottom: 1rem;
+	.links a {
+		display: inline-block;
+		padding: 0.35rem 0.8rem;
+		border: 1px solid var(--border);
+		border-radius: 999px;
+		font-size: 0.875rem;
+		text-decoration: none;
+	}
+
+	.links a:hover {
+		border-color: var(--muted);
+	}
+
+	/* Horizontal strip that scrolls on phones and snaps to each shot. */
+	.shots {
+		display: grid;
+		grid-auto-columns: 80%;
+		grid-auto-flow: column;
+		gap: 0.75rem;
+		margin-top: 0;
+		margin-bottom: 0;
+		padding: 0 0 0.75rem;
+		overflow-x: auto;
+		list-style: none;
+		scroll-snap-type: x mandatory;
+		scrollbar-width: thin;
+	}
+
+	.shots li {
+		scroll-snap-align: start;
+	}
+
+	.shots img {
+		display: block;
+		width: 100%;
+		height: auto;
+		border-radius: 0.5rem;
+	}
+
+	/* Wider screens show every shot in a two-column grid instead. */
+	@media (min-width: 48rem) {
+		.shots {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			grid-auto-flow: row;
+			overflow: visible;
+			padding-bottom: 0;
+		}
 	}
 
 	@media (min-width: 64rem) {
-		.page-rail ul {
-			flex-direction: column;
+		/* An img doesn't grow into negative margins on its own (see .bleed). */
+		.banner {
+			width: calc(100% + 12rem);
+			max-width: none;
 		}
 	}
 </style>

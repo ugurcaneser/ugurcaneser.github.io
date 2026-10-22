@@ -33,18 +33,18 @@ Bilingual (en/tr) static technical blog: Astro 7, content collections, MDX, Expr
 Schemas are in `src/content.config.ts`; helpers in `src/lib/content.ts`.
 
 - **Posts**: `src/content/posts/<lang>/<slug>.{md,mdx}`. Entry id is `"<lang>/<slug>"`; language and slug are derived from it (`postLang`, `postSlug`). Same slug in both folders = translations (linked automatically). Always fetch posts via `getPosts(lang?)`, which sorts newest-first and filters drafts outside dev.
-- **Projects**: `src/content/projects/<id>.yaml` with bilingual `description` and link `label`s; posts reference them with `project: <id>` (`reference('projects')`). Icons sit next to the YAML and go through `astro:assets` `<Image>`.
+- **Projects**: `src/content/projects/<id>.yaml` with bilingual `description` and link `label`s, plus `platforms`, `stack`, an optional `banner` and `screenshots` (both per language, since store images have captions baked in). Images live in `src/content/projects/<id>/` and go through `astro:assets` `<Image>`. Posts reference projects with `project: <id>` (`reference('projects')`); the project's icon shows in post lists and above the post title, and its banner (or icon) becomes the post's `og:image`.
 - **Tags** are free-form strings per post and per language; URLs use `tagSlug()` which folds Turkish characters (ı, ş, ğ…).
 - **Post images** shared by both language versions go in `src/assets/posts/<project>/` and are referenced relatively (`../../../assets/posts/<project>/x.png`) so `astro:assets` optimizes them.
 - Posts about the user's other projects are written with the user-level `tech-blog` skill (`~/.claude/skills/tech-blog/SKILL.md`), which covers research, verification and the hand-over.
 
 ### Design and layout
 
-- **Dark only**, no theme toggle. The look is a cutting mat: green `--mat` background with a 16px grid (heavier every 5 cells), a ruler under the sticky header, and yellow `--marker` as the single accent. Tokens live in `:root` in `src/styles/global.css`; the code block colors in `astro.config.mjs` repeat a few of them, so change both together.
-- Fonts via Astro's fonts API (Fontsource): Big Shoulders Display for display headings (`.display`, prose `h2`/`h3`), Atkinson Hyperlegible Next for body text, JetBrains Mono for code and the small uppercase `.label` text (dates, nav, rail headings).
-- **Mobile first**: base CSS targets phones; `48rem` and `64rem` are the breakpoints. Every page puts its content in three areas of `main.page`: `.page-head` (title), `.page-rail` (secondary info) and `.page-body`. Phones stack head, rail, body (add `.rail-after` to the rail to put it after the body); from `64rem` the rail is a sticky left column. On post pages the rail holds the meta, tags and a table of contents built from the `h2`s, with the current section highlighted.
-- In `.prose`, text keeps a ~42rem measure while code blocks and standalone images use the full column width, so long code lines (e.g. ASCII maps) fit on wide screens.
-- Expressive Code (`astro-expressive-code`, configured in `astro.config.mjs`, must stay before `mdx()`) handles all fenced code with the `everforest-dark` theme: titles (`title="..."`), line markers (`{3-5}`, `ins=`, `del=`), copy button, terminal frames.
+Deliberately minimal: keep it that way unless asked.
+
+- **Dark only**, no theme toggle, no web fonts (system UI and monospace stacks). Color tokens are in `:root` in `src/styles/global.css`; the code block colors in `astro.config.mjs` repeat `--bg`, `--bg-raised` and `--border`, so change both together.
+- **Mobile first**, one centered column (`.container`, ~42rem measure). From `64rem`, code blocks and standalone images in `.prose`, and anything with the `.bleed` class (project banner, screenshot grid), extend 6rem past the text column on both sides. An `<img>` with `.bleed` also needs an explicit wider `width`, since images don't grow into negative margins.
+- Expressive Code (`astro-expressive-code`, configured in `astro.config.mjs`, must stay before `mdx()`) handles all fenced code with the `github-dark-dimmed` theme: titles (`title="..."`), line markers (`{3-5}`, `ins=`, `del=`), copy button, terminal frames.
 
 ### Must not break
 

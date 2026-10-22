@@ -1,36 +1,20 @@
-/*
- * Dark only. The look is a self-healing cutting mat: deep green with a
- * 16px grid (the tile size of the games written about here), heavier lines
- * every 5 cells, and yellow mat markings for the one accent.
- * Mobile first: base rules are for phones, wider screens add to them.
- */
+/* Dark only, single column, system fonts. Mobile first: base rules are for
+   phones, wider screens add to them. */
 
 :root {
-	--mat: #0f1f1b;
-	--mat-raised: #142722;
-	--line: #23403a;
-	--chalk: #e4ece7;
-	--sage: #8da69c;
-	--marker: #f2c94c;
+	--bg: #111113;
+	--bg-raised: #18181b;
+	--border: #27272a;
+	--text: #e4e4e7;
+	--muted: #8e8e96;
 
-	--grid-minor: rgb(228 236 231 / 0.03);
-	--grid-major: rgb(228 236 231 / 0.06);
+	--font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+	--font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
 
-	--font-display: var(--font-big-shoulders), 'Arial Narrow', sans-serif;
-	--font-body: var(--font-atkinson), system-ui, sans-serif;
-	--font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
-
-	--gutter: 1rem;
 	--measure: 42rem;
-	--header-height: 3.5rem;
+	--gutter: 1.25rem;
 
 	color-scheme: dark;
-}
-
-@media (min-width: 48rem) {
-	:root {
-		--gutter: 2rem;
-	}
 }
 
 *,
@@ -41,236 +25,111 @@
 
 html {
 	-webkit-text-size-adjust: 100%;
-	scroll-padding-top: calc(var(--header-height) + 1.5rem);
 }
 
 body {
 	margin: 0;
-	background-color: var(--mat);
-	background-image:
-		linear-gradient(to right, var(--grid-major) 1px, transparent 1px),
-		linear-gradient(to bottom, var(--grid-major) 1px, transparent 1px),
-		linear-gradient(to right, var(--grid-minor) 1px, transparent 1px),
-		linear-gradient(to bottom, var(--grid-minor) 1px, transparent 1px);
-	background-size:
-		80px 80px,
-		80px 80px,
-		16px 16px,
-		16px 16px;
-	color: var(--chalk);
-	font-family: var(--font-body);
+	background: var(--bg);
+	color: var(--text);
+	font-family: var(--font-sans);
 	font-size: 1.0625rem;
-	line-height: 1.65;
+	line-height: 1.7;
 	-webkit-font-smoothing: antialiased;
-}
-
-@media (min-width: 64rem) {
-	body {
-		font-size: 1.125rem;
-	}
-}
-
-::selection {
-	background: var(--marker);
-	color: var(--mat);
 }
 
 a {
 	color: inherit;
-	text-decoration-color: var(--marker);
+	text-decoration-color: var(--muted);
 	text-decoration-thickness: 1px;
 	text-underline-offset: 0.2em;
 }
 
 a:hover {
-	color: var(--marker);
+	text-decoration-color: var(--text);
 }
 
 :focus-visible {
-	outline: 2px solid var(--marker);
+	outline: 2px solid var(--text);
 	outline-offset: 3px;
-	border-radius: 2px;
 }
 
-/* ---- Page grid -------------------------------------------------------- */
-/* Every page fills three areas: head (title), rail (secondary info) and
-   body. Phones stack them in that order; from 64rem the rail becomes a
-   sticky column on the left. */
-
-.page {
-	display: grid;
-	grid-template-columns: minmax(0, 1fr);
-	grid-template-areas: 'head' 'rail' 'body';
-	align-content: start;
-	row-gap: 2rem;
-	max-width: 82rem;
+.container {
+	width: 100%;
+	max-width: calc(var(--measure) + 2 * var(--gutter));
 	margin: 0 auto;
-	padding: 2.5rem var(--gutter) 0;
-}
-
-.page-head {
-	grid-area: head;
-}
-
-.page-rail {
-	grid-area: rail;
-}
-
-.page-body {
-	grid-area: body;
-	min-width: 0;
-}
-
-/* Rails that only add context go after the body on phones. */
-.page:has(> .rail-after) {
-	grid-template-areas: 'head' 'body' 'rail';
-}
-
-@media (min-width: 64rem) {
-	.page {
-		grid-template-columns: 15rem minmax(0, 1fr);
-		column-gap: 4rem;
-		row-gap: 3rem;
-		padding-top: 4rem;
-	}
-
-	.page,
-	.page:has(> .rail-after) {
-		grid-template-areas: 'rail head' 'rail body';
-	}
-
-	.page-rail {
-		position: sticky;
-		top: calc(var(--header-height) + 2rem);
-		align-self: start;
-		max-height: calc(100vh - var(--header-height) - 4rem);
-		overflow-y: auto;
-		scrollbar-width: thin;
-	}
-}
-
-/* ---- Type ------------------------------------------------------------- */
-
-.display {
-	margin: 0;
-	font-family: var(--font-display);
-	font-size: clamp(2.75rem, 1.6rem + 5vw, 5rem);
-	font-weight: 800;
-	line-height: 0.92;
-	letter-spacing: 0.005em;
-	text-wrap: balance;
-}
-
-.lede {
-	max-width: var(--measure);
-	margin: 1rem 0 0;
-	color: var(--sage);
-	font-size: 1.125rem;
-	text-wrap: pretty;
-}
-
-@media (min-width: 64rem) {
-	.lede {
-		font-size: 1.25rem;
-	}
-}
-
-/* Small technical labels: dates, counts, section names in the rail. */
-.label {
-	margin: 0;
-	color: var(--sage);
-	font-family: var(--font-mono);
-	font-size: 0.75rem;
-	font-weight: 400;
-	letter-spacing: 0.06em;
-	text-transform: uppercase;
+	padding: 0 var(--gutter);
 }
 
 .muted {
-	color: var(--sage);
+	color: var(--muted);
 }
 
-.visually-hidden {
-	position: absolute;
-	width: 1px;
-	height: 1px;
-	overflow: hidden;
-	clip: rect(0 0 0 0);
-	white-space: nowrap;
+.page-title {
+	margin: 3rem 0 0.5rem;
+	font-size: 1.75rem;
+	font-weight: 600;
+	line-height: 1.25;
+	letter-spacing: -0.015em;
+	text-wrap: balance;
 }
 
-/* ---- Tags ------------------------------------------------------------- */
+.page-description {
+	margin: 0 0 2.5rem;
+	color: var(--muted);
+}
+
+.section-title {
+	margin: 3.5rem 0 1.25rem;
+	color: var(--muted);
+	font-size: 0.8125rem;
+	font-weight: 500;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+}
 
 .tags {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 0.375rem;
+	gap: 0.25rem 0.75rem;
 	margin: 0;
 	padding: 0;
 	list-style: none;
+	font-size: 0.875rem;
 }
 
-.tag {
-	display: inline-block;
-	padding: 0.2rem 0.5rem;
-	border: 1px solid var(--line);
-	border-radius: 0.25rem;
-	background: var(--mat);
-	color: var(--sage);
-	font-family: var(--font-mono);
-	font-size: 0.75rem;
-	line-height: 1.4;
+.tags a {
+	color: var(--muted);
 	text-decoration: none;
 }
 
-.tag:hover {
-	border-color: var(--marker);
-	color: var(--marker);
+.tags a::before {
+	content: '#';
 }
 
-/* ---- Post content ----------------------------------------------------- */
-/* Text keeps a reading measure; code blocks and images may use the rest of
-   the column, so long lines (e.g. ASCII level maps) fit on wide screens. */
+.tags a:hover {
+	color: var(--text);
+}
+
+/* ---- Post content ---- */
 
 .prose {
 	overflow-wrap: break-word;
 }
 
-.prose > * {
-	max-width: var(--measure);
-}
-
-.prose > .expressive-code,
-.prose > p:has(> img:only-child) {
-	max-width: none;
-}
-
-.prose > :first-child {
-	margin-top: 0;
-}
-
 .prose h2,
 .prose h3 {
-	margin: 2.5em 0 0.5em;
-	font-family: var(--font-display);
-	font-weight: 700;
-	line-height: 1.05;
-	letter-spacing: 0.01em;
-	text-wrap: balance;
+	margin: 2.25em 0 0.5em;
+	font-weight: 600;
+	line-height: 1.3;
+	letter-spacing: -0.01em;
 }
 
 .prose h2 {
-	font-size: 2rem;
+	font-size: 1.375rem;
 }
 
 .prose h3 {
-	font-size: 1.5rem;
-}
-
-@media (min-width: 64rem) {
-	.prose h2 {
-		font-size: 2.375rem;
-	}
+	font-size: 1.125rem;
 }
 
 .prose p,
@@ -287,42 +146,32 @@ a:hover {
 }
 
 .prose li + li {
-	margin-top: 0.4em;
-}
-
-.prose li::marker {
-	color: var(--marker);
-}
-
-.prose strong {
-	font-weight: 700;
+	margin-top: 0.35em;
 }
 
 .prose img {
 	display: block;
 	max-width: 100%;
 	height: auto;
-	border: 1px solid var(--line);
 	border-radius: 0.375rem;
 }
 
 .prose blockquote {
 	padding-left: 1rem;
-	border-left: 2px solid var(--marker);
-	color: var(--sage);
+	border-left: 2px solid var(--border);
+	color: var(--muted);
 }
 
 .prose :not(pre) > code {
-	padding: 0.1em 0.35em;
-	border: 1px solid var(--line);
+	padding: 0.1em 0.3em;
 	border-radius: 0.25rem;
-	background: var(--mat-raised);
+	background: var(--bg-raised);
 	font-family: var(--font-mono);
-	font-size: 0.85em;
+	font-size: 0.875em;
 }
 
 .prose .expressive-code {
-	margin: 1.75em 0;
+	margin: 1.5em 0;
 }
 
 .prose table {
@@ -334,28 +183,24 @@ a:hover {
 
 .prose th,
 .prose td {
-	padding: 0.5rem 0.75rem;
-	border: 1px solid var(--line);
+	padding: 0.4rem 0.75rem;
+	border: 1px solid var(--border);
 	text-align: left;
 }
 
-.prose th {
-	font-family: var(--font-mono);
-	font-size: 0.8rem;
-	font-weight: 600;
-}
-
 .prose hr {
-	margin: 3em 0;
+	margin: 2.5em 0;
 	border: 0;
-	border-top: 1px solid var(--line);
+	border-top: 1px solid var(--border);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-	a,
-	.tag {
-		transition:
-			color 120ms ease,
-			border-color 120ms ease;
+/* On wide screens code blocks, standalone images and anything marked
+   .bleed (banners, screenshot strips) get more room than the text, so long
+   lines (e.g. ASCII level maps) fit. */
+@media (min-width: 64rem) {
+	.bleed,
+	.prose .expressive-code,
+	.prose p:has(> img:only-child) {
+		margin-inline: -6rem;
 	}
 }

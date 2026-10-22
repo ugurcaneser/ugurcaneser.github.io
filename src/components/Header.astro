@@ -20,153 +20,53 @@ const nav = [
 const path = Astro.url.pathname;
 const isActive = (href: string) =>
 	href === home ? path === home || path.startsWith(localizePath(lang, '/posts/')) : path.startsWith(href);
-
-// Ruler numbers, one every 5 grid cells (80px), enough for a 4K-wide window.
-const marks = Array.from({ length: 50 }, (_, i) => i);
 ---
 
-<header>
-	<div class="bar">
-		<a class="brand" href={home} aria-label={t('site.title')}>
-			<span class="mark" aria-hidden="true">UE</span>
-			<span class="name">{t('site.title')}</span>
-		</a>
-		<nav aria-label={t('nav.label')}>
-			{
-				nav.map((item) => (
-					<a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>
-						{item.label}
-					</a>
-				))
-			}
-		</nav>
-		<a class="lang" href={switchHref} hreflang={otherLang} lang={otherLang} title={t('lang.switch')}>
+<header class="container">
+	<a class="brand" href={home}>{t('site.title')}</a>
+	<nav aria-label={t('nav.label')}>
+		{
+			nav.map((item) => (
+				<a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>
+					{item.label}
+				</a>
+			))
+		}
+		<a href={switchHref} hreflang={otherLang} lang={otherLang} title={t('lang.switch')}>
 			{otherLang.toUpperCase()}
 		</a>
-	</div>
-	<div class="ruler" aria-hidden="true">
-		{marks.map((n) => <span style={`left: ${n * 80}px`}>{n}</span>)}
-	</div>
+	</nav>
 </header>
 
 <style>
 	header {
-		position: sticky;
-		top: 0;
-		z-index: 10;
-		background: rgb(15 31 27 / 0.92);
-		backdrop-filter: blur(8px);
-		-webkit-backdrop-filter: blur(8px);
-	}
-
-	.bar {
 		display: flex;
-		align-items: center;
-		gap: 1rem;
-		max-width: 82rem;
-		height: var(--header-height);
-		margin: 0 auto;
-		padding: 0 var(--gutter);
+		flex-wrap: wrap;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 0.5rem 1.5rem;
+		padding-top: 1.5rem;
+		padding-bottom: 1.5rem;
 	}
 
 	.brand {
-		display: flex;
-		align-items: center;
-		gap: 0.625rem;
-		margin-right: auto;
-		color: var(--chalk);
-		text-decoration: none;
-	}
-
-	.mark {
-		display: grid;
-		place-items: center;
-		width: 2rem;
-		height: 2rem;
-		border-radius: 0.25rem;
-		background: var(--marker);
-		color: var(--mat);
-		font-family: var(--font-mono);
-		font-size: 0.8125rem;
 		font-weight: 600;
-		letter-spacing: -0.02em;
-	}
-
-	.name {
-		display: none;
-		font-family: var(--font-display);
-		font-size: 1.375rem;
-		font-weight: 800;
-		letter-spacing: 0.01em;
+		text-decoration: none;
 	}
 
 	nav {
 		display: flex;
-		gap: 1rem;
+		gap: 1.25rem;
+		font-size: 0.9375rem;
 	}
 
-	nav a,
-	.lang {
-		color: var(--sage);
-		font-family: var(--font-mono);
-		font-size: 0.75rem;
-		letter-spacing: 0.06em;
+	nav a {
+		color: var(--muted);
 		text-decoration: none;
-		text-transform: uppercase;
 	}
 
 	nav a:hover,
-	.lang:hover {
-		color: var(--chalk);
-	}
-
 	nav a[aria-current='page'] {
-		color: var(--marker);
-	}
-
-	.lang {
-		padding: 0.25rem 0.4rem;
-		border: 1px solid var(--line);
-		border-radius: 0.25rem;
-	}
-
-	/* The mat's edge: a tick every grid cell, a long one every 5 cells. */
-	.ruler {
-		position: relative;
-		height: 1.125rem;
-		overflow: hidden;
-		border-top: 1px solid var(--line);
-		border-bottom: 1px solid var(--line);
-		background-image:
-			linear-gradient(to right, var(--marker) 1px, transparent 1px),
-			linear-gradient(to right, var(--line) 1px, transparent 1px);
-		background-position:
-			0 0,
-			0 0;
-		background-repeat: repeat-x;
-		background-size:
-			80px 7px,
-			16px 4px;
-	}
-
-	.ruler span {
-		position: absolute;
-		top: 1px;
-		padding-left: 4px;
-		color: var(--marker);
-		font-family: var(--font-mono);
-		font-size: 0.5625rem;
-		line-height: 1;
-		opacity: 0.7;
-	}
-
-	@media (min-width: 40rem) {
-		.name {
-			display: inline;
-		}
-
-		nav {
-			gap: 1.5rem;
-		}
+		color: var(--text);
 	}
 </style>

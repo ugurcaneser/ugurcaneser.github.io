@@ -1,7 +1,7 @@
 ---
 import PostList from '../../components/PostList.astro';
-import ProjectLinks from '../../components/ProjectLinks.astro';
-import { langFromParam, langPaths, localizePath, useTranslations } from '../../i18n';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { langFromParam, langPaths, useTranslations } from '../../i18n';
 import Base from '../../layouts/Base.astro';
 import { getPosts, getProjects } from '../../lib/content';
 
@@ -14,43 +14,40 @@ const projects = await getProjects();
 ---
 
 <Base lang={lang} translations={{ en: '/', tr: '/tr/' }}>
-	<header class="page-head">
-		<h1 class="display">{t('nav.posts')}</h1>
-		<p class="lede">{t('home.intro')}</p>
-	</header>
-	<aside class="page-rail rail-after rail">
-		<h2 class="label">{t('home.projects')}</h2>
-		<ProjectLinks lang={lang} projects={projects} />
-		<a class="label rss" href={localizePath(lang, '/rss.xml')}>{t('footer.rss')} ↗</a>
-	</aside>
-	<div class="page-body">
-		<PostList lang={lang} posts={posts} />
-	</div>
+	<p class="intro muted">{t('home.intro')}</p>
+
+	<h2 class="section-title">{t('home.projects')}</h2>
+	<ul class="projects">
+		{
+			projects.map((project) => (
+				<li>
+					<ProjectCard lang={lang} project={project} />
+				</li>
+			))
+		}
+	</ul>
+
+	<h2 class="section-title">{t('nav.posts')}</h2>
+	<PostList lang={lang} posts={posts} />
 </Base>
 
 <style>
-	.rail {
+	.intro {
+		margin: 2rem 0 0;
+		font-size: 1.125rem;
+	}
+
+	.projects {
 		display: grid;
-		gap: 0.875rem;
-		padding: 1rem;
-		border: 1px solid var(--line);
-		border-radius: 0.375rem;
-		background: var(--mat);
+		gap: 0.75rem;
+		margin: 0;
+		padding: 0;
+		list-style: none;
 	}
 
-	.rss {
-		text-decoration: none;
-	}
-
-	@media (min-width: 64rem) {
-		.rail {
-			padding: 0;
-			border: 0;
-			background: none;
-		}
-
-		.rss {
-			margin-top: 0.5rem;
+	@media (min-width: 36rem) {
+		.projects {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
 		}
 	}
 </style>

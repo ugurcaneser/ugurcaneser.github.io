@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
-import { Font } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import { getImage } from 'astro:assets';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import { type Lang, languages, localizePath, useTranslations } from '../i18n';
@@ -12,15 +13,18 @@ interface Props {
 	/** URL of this page in other languages. Pages without one link to that language's home. */
 	translations?: Partial<Record<Lang, string>>;
 	article?: { published: Date; updated?: Date; tags: string[] };
+	/** Preview image for link shares (og:image). */
+	image?: ImageMetadata;
 }
 
-const { lang, title, description, translations = {}, article } = Astro.props;
+const { lang, title, description, translations = {}, article, image } = Astro.props;
 const t = useTranslations(lang);
 
 const siteTitle = t('site.title');
 const fullTitle = title ? `${title} · ${siteTitle}` : siteTitle;
 const metaDescription = description ?? t('site.description');
 const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = image ? await getImage({ src: image, width: Math.min(image.width, 1200), format: 'png' }) : undefined;
 const alternates = { ...translations, [lang]: Astro.url.pathname } as Partial<Record<Lang, string>>;
 ---
 
@@ -29,7 +33,7 @@ const alternates = { ...translations, [lang]: Astro.url.pathname } as Partial<Re
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width,initial-scale=1" />
-		<meta name="theme-color" content="#0f1f1b" />
+		<meta name="theme-color" content="#111113" />
 		<meta name="color-scheme" content="dark" />
 
 		<title>{fullTitle}</title>
@@ -69,15 +73,12 @@ const alternates = { ...translations, [lang]: Astro.url.pathname } as Partial<Re
 				</>
 			)
 		}
-		<meta name="twitter:card" content="summary" />
-
-		<Font cssVariable="--font-big-shoulders" preload />
-		<Font cssVariable="--font-atkinson" preload />
-		<Font cssVariable="--font-jetbrains-mono" />
+		{ogImage && <meta property="og:image" content={new URL(ogImage.src, Astro.site)} />}
+		<meta name="twitter:card" content={ogImage && image!.width >= 600 ? 'summary_large_image' : 'summary'} />
 	</head>
 	<body>
 		<Header lang={lang} translations={translations} />
-		<main class="page">
+		<main class="container">
 			<slot />
 		</main>
 		<Footer lang={lang} />

@@ -22,16 +22,25 @@ const posts = defineCollection({
 // frontmatter (`project: budgetory`) and in /projects/<id>/ URLs.
 const projects = defineCollection({
 	loader: glob({ base: './src/content/projects', pattern: '*.yaml' }),
-	schema: ({ image }) =>
-		z.object({
+	schema: ({ image }) => {
+		const text = z.object({ en: z.string(), tr: z.string() });
+		// Store images often have captions baked in, so they come per language.
+		const localizedImage = z.object({ en: image(), tr: image() });
+		return z.object({
 			name: z.string(),
 			icon: image().optional(),
-			description: z.object({ en: z.string(), tr: z.string() }),
-			links: z
-				.array(z.object({ label: z.object({ en: z.string(), tr: z.string() }), url: z.url() }))
-				.default([]),
+			description: text,
+			/** e.g. [iOS, Android] */
+			platforms: z.array(z.string()).default([]),
+			/** Main technologies, e.g. [Godot 4.7, GDScript] */
+			stack: z.array(z.string()).default([]),
+			/** Wide header image (a store feature graphic works well). */
+			banner: localizedImage.optional(),
+			screenshots: z.array(localizedImage.extend({ alt: text })).default([]),
+			links: z.array(z.object({ label: text, url: z.url() })).default([]),
 			order: z.number().default(0),
-		}),
+		});
+	},
 });
 
 export const collections = { posts, projects };
