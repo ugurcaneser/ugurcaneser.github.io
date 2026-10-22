@@ -1,0 +1,18 @@
+---
+import PostList from '../../components/PostList.astro';
+import { langFromParam, langPaths, useTranslations } from '../../i18n';
+import Base from '../../layouts/Base.astro';
+import { getPosts } from '../../lib/content';
+
+export const getStaticPaths = langPaths;
+
+const lang = langFromParam(Astro.params.lang);
+const t = useTranslations(lang);
+const posts = await getPosts(lang);
+---
+
+<Base lang={lang} translations={{ en: '/', tr: '/tr/' }}>
+	<h1 class="page-title">{t('nav.posts')}</h1>
+	<p class="page-description">{t('home.intro')}</p>
+	<PostList lang={lang} posts={posts} />
+</Base>

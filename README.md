@@ -1,69 +1,58 @@
-# Personal Website
+# ugurcaneser.github.io
 
-Welcome to my personal portfolio website repository! This website showcases my professional experience, projects, and blog posts about Mobile App Development and Data Science.
+Bilingual (English / Türkçe) technical blog about the apps and games I build, published at https://ugurcaneser.github.io.
 
-## 🚀 Technologies Used
+Built with [Astro](https://astro.build), Markdown/MDX content collections and [Expressive Code](https://expressive-code.com) for code blocks.
 
-- **Framework**: [Next.js 14](https://nextjs.org/)
-- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
-- **Typography**: Poppins font family
-- **Icons**: React Icons
-- **Blog**: [React Markdown](https://github.com/remarkjs/react-markdown) with [remark-gfm](https://github.com/remarkjs/remark-gfm)
-- **Deployment**: GitHub Pages
+## Development
 
-## 🛠️ Local Development
-
-To run this project locally, follow these steps:
+Requires Node 22.23.4 or newer (`nvm use` picks it up from `.nvmrc`).
 
 ```bash
-# Clone the repository
-git clone https://github.com/ugurcaneser/ugurcaneser.github.io.git
-
-# Navigate to the project directory
-cd ugurcaneser.github.io
-
-# Install dependencies
 npm install
-
-# Start the development server
-npm run dev
+npm run dev       # http://localhost:4321, drafts included
+npm run build     # type check + static build into dist/
+npm run preview   # serve dist/
 ```
 
-Then open [http://localhost:3000](http://localhost:3000) in your browser to see the result.
+## Writing a post
 
-## 📝 Project Structure
+Create `src/content/posts/en/<slug>.md` (or `.mdx`) and, optionally, the Turkish version at `src/content/posts/tr/<slug>.md`. Same slug = translations of each other.
 
+```yaml
+---
+title: How Budgetory syncs with iCloud
+description: One-sentence summary for lists, RSS and search results.
+date: 2026-10-22
+updated: 2026-11-01   # optional
+project: budgetory    # optional, a file name in src/content/projects/
+tags: [SwiftUI, CloudKit]
+draft: true           # drafts only show up in `npm run dev`
+---
 ```
-├── src/
-│   ├── app/            # Next.js app directory
-│   │   ├── page.tsx    # Homepage
-│   │   ├── blog/       # Blog posts and rendering components
-│   │   │   └── [id]/   # Dynamic blog post routes
-│   │   ├── lib/        # Utility functions
-│   │   └── layout.tsx  # Root layout
-│   └── components/     # Reusable components
-├── public/            # Static assets
-└── tailwind.config.ts # Tailwind CSS configuration
+
+`src/content/posts/*/writing-guide.mdx` is a draft reference post showing every supported feature (code block titles, line highlighting, diffs, tables).
+
+## Adding a project
+
+Add `src/content/projects/<id>.yaml` (and an optional icon next to it):
+
+```yaml
+name: Budgetory
+icon: ./budgetory.png
+description:
+  en: An iOS app for tracking your budget easily.
+  tr: Bütçeni kolayca takip etmen için bir iOS uygulaması.
+links:
+  - label: { en: App Store, tr: App Store }
+    url: https://apps.apple.com/...
 ```
-## 📝 Blog Page
 
-The blog page of this website presents a collection of blog posts with the following features:
+## Deployment
 
-- **Data Fetching**: Utilizes an asynchronous function to fetch and sort blog post data.
-- **Responsive Design**: Styled with Tailwind CSS for a clean and responsive layout.
-- **Navigation**: Includes a link to return to the homepage, enhanced with React Icons.
-- **Post Display**: Each post is displayed with a title, publication date, and a content snippet, arranged in a grid format for easy navigation and reading.
+Every push to `main` is built and deployed to GitHub Pages by `.github/workflows/deploy.yml`.
 
-## 📸 Gallery Page
+App legal pages are **not** part of this repo. They are separate GitHub Pages project sites and keep working independently of this blog:
 
-The gallery page of this website showcases a collection of photos using the following technologies:
-
-- **Image Handling**: Utilizes Next.js `Image` component for optimized image loading.
-- **Navigation**: Uses Next.js `Link` component for seamless client-side transitions.
-- **Icons**: Features icons from the `react-icons/fa6` package for interactive elements.
-
-Each photo is displayed with specific dimensions to ensure a consistent layout and appearance across devices.
-
-## 📄 License
-
-This project is open source and available under the [MIT License](LICENSE).
+- https://ugurcaneser.github.io/budgetory-legal/ ([budgetory-legal](https://github.com/ugurcaneser/budgetory-legal))
+- https://ugurcaneser.github.io/pizza-assassin-site/ ([pizza-assassin-site](https://github.com/ugurcaneser/pizza-assassin-site))

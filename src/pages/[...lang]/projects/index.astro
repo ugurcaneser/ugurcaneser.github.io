@@ -1,0 +1,102 @@
+---
+import { Image } from 'astro:assets';
+import { langFromParam, langPaths, localizePath, useTranslations } from '../../../i18n';
+import Base from '../../../layouts/Base.astro';
+import { getPosts, getProjects } from '../../../lib/content';
+
+export const getStaticPaths = langPaths;
+
+const lang = langFromParam(Astro.params.lang);
+const t = useTranslations(lang);
+const posts = await getPosts(lang);
+const projects = (await getProjects()).map((project) => {
+	const count = posts.filter((post) => post.data.project?.id === project.id).length;
+	return { project, count };
+});
+---
+
+<Base
+	lang={lang}
+	title={t('projects.title')}
+	description={t('projects.description')}
+	translations={{ en: '/projects/', tr: '/tr/projects/' }}
+>
+	<h1 class="page-title">{t('projects.title')}</h1>
+	<p class="page-description">{t('projects.description')}</p>
+	<ul class="projects">
+		{
+			projects.map(({ project, count }) => (
+				<li>
+					<a href={localizePath(lang, `/projects/${project.id}/`)}>
+						{project.data.icon ? (
+							<Image src={project.data.icon} alt="" width={56} height={56} densities={[1, 2]} />
+						) : (
+							<span class="placeholder" aria-hidden="true">
+								{project.data.name[0]}
+							</span>
+						)}
+						<span class="text">
+							<strong>{project.data.name}</strong>
+							<span class="muted">{project.data.description[lang]}</span>
+							<span class="count">
+								{count === 1 ? t('projects.postCountOne') : t('projects.postCount', { n: count })}
+							</span>
+						</span>
+					</a>
+				</li>
+			))
+		}
+	</ul>
+</Base>
+
+<style>
+	.projects {
+		display: grid;
+		gap: 1rem;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.projects a {
+		display: flex;
+		gap: 1rem;
+		align-items: flex-start;
+		padding: 1rem;
+		border: 1px solid var(--border);
+		border-radius: 0.75rem;
+		color: var(--text);
+		text-decoration: none;
+	}
+
+	.projects a:hover {
+		border-color: var(--accent);
+	}
+
+	img,
+	.placeholder {
+		flex: none;
+		width: 56px;
+		height: 56px;
+		border-radius: 0.8rem;
+	}
+
+	.placeholder {
+		display: grid;
+		place-items: center;
+		background: var(--bg-subtle);
+		font-size: 1.5rem;
+		font-weight: 700;
+	}
+
+	.text {
+		display: flex;
+		flex-direction: column;
+		gap: 0.15rem;
+	}
+
+	.count {
+		color: var(--text-muted);
+		font-size: 0.85rem;
+	}
+</style>

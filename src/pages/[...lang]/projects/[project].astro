@@ -1,0 +1,91 @@
+---
+import { Image } from 'astro:assets';
+import PostList from '../../../components/PostList.astro';
+import { langParam, langs, localizePath, useTranslations } from '../../../i18n';
+import Base from '../../../layouts/Base.astro';
+import { getPosts, getProjects, type Project } from '../../../lib/content';
+
+export async function getStaticPaths() {
+	const projects = await getProjects();
+	return langs.flatMap((lang) =>
+		projects.map((project) => ({
+			params: { lang: langParam(lang), project: project.id },
+			props: { lang, project },
+		})),
+	);
+}
+
+interface Props {
+	lang: (typeof langs)[number];
+	project: Project;
+}
+
+const { lang, project } = Astro.props;
+const t = useTranslations(lang);
+const { name, icon, description, links } = project.data;
+const posts = (await getPosts(lang)).filter((post) => post.data.project?.id === project.id);
+const translations = Object.fromEntries(langs.map((l) => [l, localizePath(l, `/projects/${project.id}/`)]));
+---
+
+<Base lang={lang} title={name} description={description[lang]} translations={translations}>
+	<header>
+		{icon && <Image src={icon} alt="" width={72} height={72} densities={[1, 2]} />}
+		<div>
+			<h1 class="page-title">{name}</h1>
+			<p class="muted">{description[lang]}</p>
+			{
+				links.length > 0 && (
+					<ul class="links">
+						{links.map((link) => (
+							<li>
+								<a href={link.url}>{link.label[lang]} ↗</a>
+							</li>
+						))}
+					</ul>
+				)
+			}
+		</div>
+	</header>
+	<h2>{t('projects.posts')}</h2>
+	<PostList lang={lang} posts={posts} hideProject />
+</Base>
+
+<style>
+	header {
+		display: flex;
+		gap: 1.25rem;
+		align-items: flex-start;
+		margin: 2.5rem 0 3rem;
+	}
+
+	header img {
+		flex: none;
+		border-radius: 1rem;
+	}
+
+	.page-title {
+		margin-top: 0;
+	}
+
+	header p {
+		margin: 0 0 0.75rem;
+	}
+
+	.links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem 1.25rem;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		font-size: 0.95rem;
+	}
+
+	h2 {
+		margin: 0 0 1.25rem;
+		color: var(--text-muted);
+		font-size: 0.85rem;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+	}
+</style>

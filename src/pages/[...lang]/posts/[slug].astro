@@ -1,0 +1,141 @@
+---
+import { getEntry, render } from 'astro:content';
+import { formatDate, langParam, localizePath, useTranslations } from '../../../i18n';
+import Base from '../../../layouts/Base.astro';
+import {
+	getPosts,
+	getTranslations,
+	type Post,
+	postLang,
+	postSlug,
+	postUrl,
+	readingTime,
+	tagUrl,
+} from '../../../lib/content';
+
+export async function getStaticPaths() {
+	const posts = await getPosts();
+	return posts.map((post) => ({
+		params: { lang: langParam(postLang(post)), slug: postSlug(post) },
+		props: { post },
+	}));
+}
+
+interface Props {
+	post: Post;
+}
+
+const { post } = Astro.props;
+const lang = postLang(post);
+const t = useTranslations(lang);
+const { Content } = await render(post);
+const project = post.data.project ? await getEntry(post.data.project) : undefined;
+const translations = Object.fromEntries((await getTranslations(post)).map((p) => [postLang(p), postUrl(p)]));
+const { title, description, date, updated, tags } = post.data;
+---
+
+<Base
+	lang={lang}
+	title={title}
+	description={description}
+	translations={translations}
+	article={{ published: date, updated, tags }}
+>
+	<article>
+		<header>
+			<p class="meta">
+				<time datetime={date.toISOString()}>{formatDate(date, lang)}</time>
+				<span aria-hidden="true">·</span>
+				<span>{t('post.minRead', { n: readingTime(post) })}</span>
+				{
+					updated && (
+						<>
+							<span aria-hidden="true">·</span>
+							<span>
+								{t('post.updated')} <time datetime={updated.toISOString()}>{formatDate(updated, lang)}</time>
+							</span>
+						</>
+					)
+				}
+			</p>
+			<h1>{title}</h1>
+			<p class="lede">{description}</p>
+			<div class="info">
+				{
+					project && (
+						<span class="muted">
+							{t('post.partOf')} <a href={localizePath(lang, `/projects/${project.id}/`)}>{project.data.name}</a>
+						</span>
+					)
+				}
+				{
+					Object.entries(translations).map(([l, href]) => (
+						<a href={href} hreflang={l} lang={l}>
+							{t('post.readIn')}
+						</a>
+					))
+				}
+			</div>
+			{
+				tags.length > 0 && (
+					<ul class="tags">
+						{tags.map((tag) => (
+							<li>
+								<a class="tag" href={tagUrl(lang, tag)}>
+									{tag}
+								</a>
+							</li>
+						))}
+					</ul>
+				)
+			}
+		</header>
+		<div class="prose">
+			<Content />
+		</div>
+	</article>
+</Base>
+
+<style>
+	article > header {
+		margin: 2.5rem 0 2.5rem;
+		padding-bottom: 1.5rem;
+		border-bottom: 1px solid var(--border);
+	}
+
+	.meta {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.4rem;
+		margin: 0;
+		color: var(--text-muted);
+		font-size: 0.9rem;
+	}
+
+	h1 {
+		margin: 0.4rem 0 0.75rem;
+		font-size: 2.25rem;
+		line-height: 1.2;
+		letter-spacing: -0.025em;
+	}
+
+	.lede {
+		margin: 0 0 1rem;
+		color: var(--text-muted);
+		font-size: 1.15rem;
+	}
+
+	.info {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.4rem 1.25rem;
+		margin-bottom: 1rem;
+		font-size: 0.95rem;
+	}
+
+	@media (max-width: 30rem) {
+		h1 {
+			font-size: 1.85rem;
+		}
+	}
+</style>

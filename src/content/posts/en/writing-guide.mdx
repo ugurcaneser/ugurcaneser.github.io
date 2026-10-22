@@ -1,0 +1,65 @@
+---
+title: Writing guide
+description: Reference post showing the frontmatter and Markdown features this blog supports. It is a draft, so it only appears in npm run dev.
+date: 2026-10-22
+project: budgetory
+tags: [Meta, Astro]
+draft: true
+---
+
+Every post is a Markdown (`.md`) or MDX (`.mdx`) file in `src/content/posts/<lang>/`. A file with the same name in `en/` and `tr/` is treated as the translation of this post, and the header links to it automatically.
+
+## Frontmatter
+
+```yaml title="src/content/posts/en/my-post.md"
+---
+title: How Budgetory syncs with iCloud
+description: One-sentence summary shown in lists, RSS and search results.
+date: 2026-10-22
+updated: 2026-11-01 # optional
+project: budgetory # optional, file name in src/content/projects/
+tags: [SwiftUI, CloudKit]
+draft: false # true hides the post in production builds
+---
+```
+
+## Code blocks
+
+Code blocks get syntax highlighting, a copy button, and an optional file name:
+
+```swift title="BudgetStore.swift" {3-5}
+@Observable
+final class BudgetStore {
+    var entries: [Entry] = []
+
+    func add(_ entry: Entry) {
+        entries.append(entry)
+    }
+}
+```
+
+Lines can also be marked as inserted or deleted:
+
+```ts del={2} ins={3}
+export function total(entries: Entry[]) {
+  return entries.reduce((sum, e) => sum + e.amount);
+  return entries.reduce((sum, e) => sum + e.amount, 0);
+}
+```
+
+Terminal sessions render as a terminal frame:
+
+```bash
+npm run dev
+```
+
+## Everything else
+
+Regular Markdown works as expected: **bold**, _italic_, `inline code`, [links](https://astro.build), lists, tables and quotes.
+
+| Feature | Supported |
+| ------- | --------- |
+| Tables  | Yes       |
+| MDX     | Yes       |
+
+> Images go next to the post file and are referenced relatively: `![Alt text](./diagram.png)`.

@@ -1,0 +1,54 @@
+---
+import PostList from '../../../components/PostList.astro';
+import { type Lang, langParam, langs, useTranslations } from '../../../i18n';
+import Base from '../../../layouts/Base.astro';
+import { collectTags, getPosts, tagSlug, tagUrl } from '../../../lib/content';
+
+// Tags are per language: Turkish posts can use Turkish tags, so a tag page
+// only exists in the languages that actually use the tag.
+export async function getStaticPaths() {
+	const paths = [];
+	for (const lang of langs) {
+		const posts = await getPosts(lang);
+		for (const tag of collectTags(posts)) {
+			paths.push({
+				params: { lang: langParam(lang), tag: tag.slug },
+				props: {
+					lang,
+					name: tag.name,
+					posts: posts.filter((post) => post.data.tags.some((t) => tagSlug(t) === tag.slug)),
+				},
+			});
+		}
+	}
+	return paths;
+}
+
+type Props = {
+	lang: Lang;
+	name: string;
+	posts: Awaited<ReturnType<typeof getPosts>>;
+};
+
+const { lang, name, posts } = Astro.props;
+const t = useTranslations(lang);
+
+// Link to the same tag in the other language only if posts there use it.
+const translations: Partial<Record<Lang, string>> = {};
+for (const other of langs.filter((l) => l !== lang)) {
+	const otherTags = collectTags(await getPosts(other));
+	if (otherTags.some((tag) => tag.slug === tagSlug(name))) translations[other] = tagUrl(other, name);
+}
+---
+
+<Base lang={lang} title={t('tags.tagged', { tag: name })} translations={translations}>
+	<h1 class="page-title">{t('tags.tagged', { tag: name })}</h1>
+	<div class="spacer"></div>
+	<PostList lang={lang} posts={posts} />
+</Base>
+
+<style>
+	.spacer {
+		height: 1.5rem;
+	}
+</style>

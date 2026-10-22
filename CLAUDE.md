@@ -4,37 +4,44 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Commands
 
+Node ≥ 22.23.4 is required by Astro 7 (`.nvmrc` says `22`; run `nvm use` first).
+
 ```bash
-npm install       # install dependencies
-npm run dev       # dev server (Turbopack) at http://localhost:3000
-npm run build     # production build — also the de facto type check
-npm run lint      # ESLint (next lint, config in eslint.config.mjs)
+npm run dev       # dev server at http://localhost:4321 (drafts are visible here only)
+npm run build     # astro check (types + .astro diagnostics) && astro build → dist/
+npm run check     # type check only
+npm run preview   # serve the built dist/
 ```
 
-There is no test suite. Verify changes with `npm run build` and `npm run lint` before pushing.
+There is no test suite; `npm run build` is the verification step and must pass before pushing. Draft posts are excluded from the build, so to verify a draft's page renders, temporarily set `draft: false` (or check it in `npm run dev`).
 
 ## Architecture
 
-Personal portfolio site: Next.js 15 App Router, React 19, TypeScript, Tailwind CSS 3 (+ `@tailwindcss/typography`), Framer Motion, `react-icons`. Everything lives under `src/app/`; there is no `src/components/` directory despite what the README and `tailwind.config.ts` suggest.
+Bilingual (en/tr) static technical blog: Astro 7, content collections, MDX, Expressive Code, plain CSS (no Tailwind). Deployed to GitHub Pages at the user-site root (`https://ugurcaneser.github.io`, no `base`) by `.github/workflows/deploy.yml` on push to `main`.
 
-### Deployment / static export
+### i18n routing
 
-The site is deployed to GitHub Pages by `.github/workflows/nextjs.yml` on pushes to `main`. `next.config.ts` is intentionally empty: the `actions/configure-pages` step (`static_site_generator: next`) injects `output: "export"`, `basePath` and `images.unoptimized` at build time, and the workflow uploads `./out`. Consequences:
+- English is unprefixed (`/posts/x/`), Turkish is under `/tr/`. There is no Astro `i18n` config; routing is manual.
+- Every page lives under `src/pages/[...lang]/` and is generated once per language. The rest param is `undefined` for English and `"tr"` for Turkish — use `langParam()` / `langFromParam()` / `langPaths()` from `src/i18n.ts` rather than building params by hand.
+- All internal links go through `localizePath(lang, path)`. `trailingSlash: 'always'` is set, so paths end in `/` (except files like `rss.xml`).
+- UI strings are in the `ui` object in `src/i18n.ts`; keys must exist in both languages (`useTranslations` is typed off the `en` keys).
+- `Base.astro` takes a `translations` map (lang → URL of this page in that language). It drives both the hreflang `<link>`s and the header language switch; when a language is missing, the switch falls back to that language's home page. Pages must only pass URLs that actually exist (e.g. tag pages check the other language uses the tag).
+- `src/pages/404.astro` is outside `[...lang]` because GitHub Pages serves a single `404.html`; it shows both languages.
 
-- A plain local `npm run build` does not reproduce the static-export constraints. Avoid features that need a server at runtime (API routes, server actions, dynamic routes without `generateStaticParams`, middleware, uncached `cookies()`/`headers()`).
-- Dynamic routes must enumerate all params via `generateStaticParams` (see `src/app/blog/[id]/page.tsx`).
+### Content
 
-### Pages
+Schemas are in `src/content.config.ts`; helpers in `src/lib/content.ts`.
 
-- `page.tsx` (home), `projects/page.tsx`, `gallery/page.tsx` are client components (`"use client"`) with content hard-coded as arrays at the top of each file — the homepage `links` array, the `projects` array, and the `photos` array (with explicit pixel `width`/`height` per image). Adding a project or photo means editing that array and dropping the asset into `public/images/...`.
-- Homepage nav links use relative hrefs (`./projects`); the blog link is currently commented out, so `/blog` exists but is unlinked.
+- **Posts**: `src/content/posts/<lang>/<slug>.{md,mdx}`. Entry id is `"<lang>/<slug>"`; language and slug are derived from it (`postLang`, `postSlug`). Same slug in both folders = translations (linked automatically). Always fetch posts via `getPosts(lang?)`, which sorts newest-first and filters drafts outside dev.
+- **Projects**: `src/content/projects/<id>.yaml` with bilingual `description` and link `label`s; posts reference them with `project: <id>` (`reference('projects')`). Icons sit next to the YAML and go through `astro:assets` `<Image>`.
+- **Tags** are free-form strings per post and per language; URLs use `tagSlug()` which folds Turkish characters (ı, ş, ğ…).
 
-### Blog pipeline
+### Code blocks and theming
 
-- Posts are Markdown files with gray-matter front matter (`title`, `date`) in `src/app/posts/`; the filename (minus `.md`) is the post id/slug.
-- `src/app/lib/posts.ts` `getSortedPostsData()` reads them with `fs` at build time (server-only). It sorts with `date.localeCompare`, i.e. as strings — dates are written like `"December 22, 2024"`, so ordering is not chronological across months/years.
-- `blog/page.tsx` (server component) lists posts; `blog/[id]/page.tsx` (server) generates static params/metadata and passes the post to `ClientBlogPost.tsx` (client), which renders with `react-markdown` + `remark-gfm` and per-element Tailwind overrides. `remark`/`remark-html` are installed but unused.
+- Expressive Code (`astro-expressive-code`, configured in `astro.config.mjs`, must stay before `mdx()`) handles all fenced code: titles (`title="..."`), line markers (`{3-5}`, `ins=`, `del=`), copy button, terminal frames.
+- Dark mode is a `data-theme="light|dark"` attribute on `<html>`, set by an inline script in `Base.astro` (localStorage, then `prefers-color-scheme`) and toggled in `Header.astro`. Expressive Code is tied to the same attribute via `themeCssSelector`, so don't switch it to media-query-based theming.
+- Colors are CSS custom properties in `src/styles/global.css` (`:root` and `:root[data-theme='dark']`); components use scoped `<style>` blocks referencing those tokens. Fonts (Inter, JetBrains Mono) come from Astro's fonts API (Fontsource provider) as `--font-inter` / `--font-jetbrains-mono`.
 
-### Styling
+### Must not break
 
-Poppins is loaded via `next/font/google` in `layout.tsx` and exposed as the `font-poppins` Tailwind family. `<html>` is fixed to `data-theme="light"`; the visual style is white background, black text, red (`text-red-600`/`hover:text-red-800`) accents.
+App privacy/support pages that were given to Apple live in **separate repos** served as GitHub Pages project sites: `/budgetory-legal/` and `/pizza-assassin-site/` (incl. `/privacy/`, `/support/`). Never create top-level routes with those names, and don't add a custom domain (`CNAME`) to this site — that would change those URLs.

@@ -1,0 +1,46 @@
+---
+import { langFromParam, langPaths, useTranslations } from '../../../i18n';
+import Base from '../../../layouts/Base.astro';
+import { collectTags, getPosts, tagUrl } from '../../../lib/content';
+
+export const getStaticPaths = langPaths;
+
+const lang = langFromParam(Astro.params.lang);
+const t = useTranslations(lang);
+const tags = collectTags(await getPosts(lang));
+---
+
+<Base
+	lang={lang}
+	title={t('tags.title')}
+	description={t('tags.description')}
+	translations={{ en: '/tags/', tr: '/tr/tags/' }}
+>
+	<h1 class="page-title">{t('tags.title')}</h1>
+	<p class="page-description">{t('tags.description')}</p>
+	{
+		tags.length === 0 ? (
+			<p class="muted">{t('home.empty')}</p>
+		) : (
+			<ul class="tags">
+				{tags.map((tag) => (
+					<li>
+						<a class="tag" href={tagUrl(lang, tag.name)}>
+							{tag.name} <span>{tag.count}</span>
+						</a>
+					</li>
+				))}
+			</ul>
+		)
+	}
+</Base>
+
+<style>
+	.tag {
+		font-size: 0.95rem;
+	}
+
+	.tag span {
+		opacity: 0.6;
+	}
+</style>

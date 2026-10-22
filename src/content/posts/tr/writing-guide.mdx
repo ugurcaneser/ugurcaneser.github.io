@@ -1,0 +1,65 @@
+---
+title: Yazım rehberi
+description: Bu blogun desteklediği frontmatter ve Markdown özelliklerini gösteren referans yazı. Taslak olduğu için yalnızca npm run dev sırasında görünür.
+date: 2026-10-22
+project: budgetory
+tags: [Meta, Astro]
+draft: true
+---
+
+Her yazı `src/content/posts/<dil>/` altında bir Markdown (`.md`) ya da MDX (`.mdx`) dosyasıdır. `en/` ve `tr/` klasörlerinde aynı isimli dosyalar birbirinin çevirisi sayılır ve başlıkta otomatik olarak birbirine bağlanır.
+
+## Frontmatter
+
+```yaml title="src/content/posts/tr/yazim.md"
+---
+title: Budgetory iCloud ile nasıl senkronize oluyor
+description: Listelerde, RSS'te ve arama sonuçlarında görünen tek cümlelik özet.
+date: 2026-10-22
+updated: 2026-11-01 # isteğe bağlı
+project: budgetory # isteğe bağlı, src/content/projects/ altındaki dosya adı
+tags: [SwiftUI, CloudKit]
+draft: false # true ise yazı production build'de görünmez
+---
+```
+
+## Kod blokları
+
+Kod bloklarında syntax renklendirme, kopyala butonu ve isteğe bağlı dosya adı bulunur:
+
+```swift title="BudgetStore.swift" {3-5}
+@Observable
+final class BudgetStore {
+    var entries: [Entry] = []
+
+    func add(_ entry: Entry) {
+        entries.append(entry)
+    }
+}
+```
+
+Satırlar eklenmiş ya da silinmiş olarak işaretlenebilir:
+
+```ts del={2} ins={3}
+export function total(entries: Entry[]) {
+  return entries.reduce((sum, e) => sum + e.amount);
+  return entries.reduce((sum, e) => sum + e.amount, 0);
+}
+```
+
+Terminal komutları terminal çerçevesiyle gösterilir:
+
+```bash
+npm run dev
+```
+
+## Diğer her şey
+
+Normal Markdown beklendiği gibi çalışır: **kalın**, _italik_, `satır içi kod`, [linkler](https://astro.build), listeler, tablolar ve alıntılar.
+
+| Özellik | Destek |
+| ------- | ------ |
+| Tablo   | Var    |
+| MDX     | Var    |
+
+> Görseller yazı dosyasının yanına konur ve göreli yolla eklenir: `![Açıklama](./diagram.png)`.

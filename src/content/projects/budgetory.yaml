@@ -1,0 +1,10 @@
+name: Budgetory
+icon: ./budgetory.png
+description:
+  en: An iOS app for tracking your budget easily.
+  tr: Bütçeni kolayca takip etmen için bir iOS uygulaması.
+links:
+  - label: { en: App Store, tr: App Store }
+    url: https://apps.apple.com/tr/app/budgetory/id6740176453
+  - label: { en: Privacy policy, tr: Gizlilik politikası }
+    url: https://ugurcaneser.github.io/budgetory-legal/

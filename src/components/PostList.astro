@@ -1,0 +1,117 @@
+---
+import { getEntry } from 'astro:content';
+import { formatDate, type Lang, localizePath, useTranslations } from '../i18n';
+import { type Post, postUrl, readingTime, tagUrl } from '../lib/content';
+
+interface Props {
+	lang: Lang;
+	posts: Post[];
+	/** Hide the project label, e.g. on a project's own page. */
+	hideProject?: boolean;
+}
+
+const { lang, posts, hideProject = false } = Astro.props;
+const t = useTranslations(lang);
+
+const items = await Promise.all(
+	posts.map(async (post) => ({
+		post,
+		project: !hideProject && post.data.project ? await getEntry(post.data.project) : undefined,
+	})),
+);
+---
+
+{
+	posts.length === 0 ? (
+		<p class="muted">{t('home.empty')}</p>
+	) : (
+		<ul class="posts">
+			{items.map(({ post, project }) => (
+				<li>
+					<article>
+						<p class="meta">
+							<time datetime={post.data.date.toISOString()}>{formatDate(post.data.date, lang)}</time>
+							<span aria-hidden="true">·</span>
+							<span>{t('post.minRead', { n: readingTime(post) })}</span>
+							{project && (
+								<>
+									<span aria-hidden="true">·</span>
+									<a href={localizePath(lang, `/projects/${project.id}/`)}>{project.data.name}</a>
+								</>
+							)}
+							{post.data.draft && <span class="draft">draft</span>}
+						</p>
+						<h2>
+							<a href={postUrl(post)}>{post.data.title}</a>
+						</h2>
+						<p class="description">{post.data.description}</p>
+						{post.data.tags.length > 0 && (
+							<ul class="tags">
+								{post.data.tags.map((tag) => (
+									<li>
+										<a class="tag" href={tagUrl(lang, tag)}>
+											{tag}
+										</a>
+									</li>
+								))}
+							</ul>
+						)}
+					</article>
+				</li>
+			))}
+		</ul>
+	)
+}
+
+<style>
+	.posts {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.posts > li + li {
+		margin-top: 2.25rem;
+	}
+
+	.meta {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.4rem;
+		margin: 0;
+		color: var(--text-muted);
+		font-size: 0.875rem;
+	}
+
+	.meta a {
+		color: inherit;
+	}
+
+	h2 {
+		margin: 0.2rem 0 0.35rem;
+		font-size: 1.3rem;
+		line-height: 1.35;
+		letter-spacing: -0.01em;
+	}
+
+	h2 a {
+		color: var(--text);
+		text-decoration: none;
+	}
+
+	h2 a:hover {
+		color: var(--accent);
+	}
+
+	.description {
+		margin: 0 0 0.6rem;
+	}
+
+	.draft {
+		padding: 0 0.4rem;
+		border-radius: 0.25rem;
+		background: var(--accent);
+		color: var(--bg);
+		font-weight: 600;
+	}
+</style>

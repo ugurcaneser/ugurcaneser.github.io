@@ -1,0 +1,15 @@
+---
+import { useTranslations } from '../i18n';
+import Base from '../layouts/Base.astro';
+
+// GitHub Pages serves this single 404.html for every missing URL, so it shows
+// both languages instead of guessing.
+const en = useTranslations('en');
+const tr = useTranslations('tr');
+---
+
+<Base lang="en" title={en('404.title')}>
+	<h1 class="page-title">404</h1>
+	<p>{en('404.body')} <a href="/">{en('404.home')}</a></p>
+	<p lang="tr">{tr('404.body')} <a href="/tr/">{tr('404.home')}</a></p>
+</Base>
