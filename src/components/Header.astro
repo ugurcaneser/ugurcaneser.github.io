@@ -20,12 +20,18 @@ const nav = [
 const path = Astro.url.pathname;
 const isActive = (href: string) =>
 	href === home ? path === home || path.startsWith(localizePath(lang, '/posts/')) : path.startsWith(href);
+
+// Ruler numbers, one every 5 grid cells (80px), enough for a 4K-wide window.
+const marks = Array.from({ length: 50 }, (_, i) => i);
 ---
 
 <header>
-	<div class="container bar">
-		<a class="brand" href={home}>{t('site.title')}</a>
-		<nav>
+	<div class="bar">
+		<a class="brand" href={home} aria-label={t('site.title')}>
+			<span class="mark" aria-hidden="true">UE</span>
+			<span class="name">{t('site.title')}</span>
+		</a>
+		<nav aria-label={t('nav.label')}>
 			{
 				nav.map((item) => (
 					<a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>
@@ -34,126 +40,133 @@ const isActive = (href: string) =>
 				))
 			}
 		</nav>
-		<div class="actions">
-			<a class="lang" href={switchHref} hreflang={otherLang} lang={otherLang} title={t('lang.switch')}>
-				{otherLang.toUpperCase()}
-			</a>
-			<button class="theme-toggle" type="button" aria-label={t('theme.toggle')} title={t('theme.toggle')}>
-				<svg class="sun" viewBox="0 0 24 24" aria-hidden="true">
-					<circle cx="12" cy="12" r="4"></circle>
-					<path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
-				</svg>
-				<svg class="moon" viewBox="0 0 24 24" aria-hidden="true">
-					<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-				</svg>
-			</button>
-		</div>
+		<a class="lang" href={switchHref} hreflang={otherLang} lang={otherLang} title={t('lang.switch')}>
+			{otherLang.toUpperCase()}
+		</a>
+	</div>
+	<div class="ruler" aria-hidden="true">
+		{marks.map((n) => <span style={`left: ${n * 80}px`}>{n}</span>)}
 	</div>
 </header>
 
-<script>
-	for (const button of document.querySelectorAll('.theme-toggle')) {
-		button.addEventListener('click', () => {
-			const root = document.documentElement;
-			const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
-			root.dataset.theme = next;
-			try {
-				localStorage.setItem('theme', next);
-			} catch {}
-		});
-	}
-</script>
-
 <style>
 	header {
-		border-bottom: 1px solid var(--border);
+		position: sticky;
+		top: 0;
+		z-index: 10;
+		background: rgb(15 31 27 / 0.92);
+		backdrop-filter: blur(8px);
+		-webkit-backdrop-filter: blur(8px);
 	}
 
 	.bar {
 		display: flex;
-		flex-wrap: wrap;
 		align-items: center;
-		gap: 0.5rem 1.5rem;
-		padding-top: 1rem;
-		padding-bottom: 1rem;
+		gap: 1rem;
+		max-width: 82rem;
+		height: var(--header-height);
+		margin: 0 auto;
+		padding: 0 var(--gutter);
 	}
 
 	.brand {
-		color: var(--text);
-		font-weight: 700;
+		display: flex;
+		align-items: center;
+		gap: 0.625rem;
+		margin-right: auto;
+		color: var(--chalk);
 		text-decoration: none;
+	}
+
+	.mark {
+		display: grid;
+		place-items: center;
+		width: 2rem;
+		height: 2rem;
+		border-radius: 0.25rem;
+		background: var(--marker);
+		color: var(--mat);
+		font-family: var(--font-mono);
+		font-size: 0.8125rem;
+		font-weight: 600;
+		letter-spacing: -0.02em;
+	}
+
+	.name {
+		display: none;
+		font-family: var(--font-display);
+		font-size: 1.375rem;
+		font-weight: 800;
+		letter-spacing: 0.01em;
 	}
 
 	nav {
 		display: flex;
 		gap: 1rem;
-		margin-right: auto;
 	}
 
-	nav a {
-		color: var(--text-muted);
-		font-size: 0.95rem;
+	nav a,
+	.lang {
+		color: var(--sage);
+		font-family: var(--font-mono);
+		font-size: 0.75rem;
+		letter-spacing: 0.06em;
 		text-decoration: none;
+		text-transform: uppercase;
 	}
 
 	nav a:hover,
-	nav a[aria-current='page'] {
-		color: var(--text);
+	.lang:hover {
+		color: var(--chalk);
 	}
 
-	.actions {
-		display: flex;
-		align-items: center;
-		gap: 0.75rem;
+	nav a[aria-current='page'] {
+		color: var(--marker);
 	}
 
 	.lang {
-		color: var(--text-muted);
-		font-size: 0.85rem;
-		font-weight: 600;
-		text-decoration: none;
+		padding: 0.25rem 0.4rem;
+		border: 1px solid var(--line);
+		border-radius: 0.25rem;
 	}
 
-	.lang:hover {
-		color: var(--text);
+	/* The mat's edge: a tick every grid cell, a long one every 5 cells. */
+	.ruler {
+		position: relative;
+		height: 1.125rem;
+		overflow: hidden;
+		border-top: 1px solid var(--line);
+		border-bottom: 1px solid var(--line);
+		background-image:
+			linear-gradient(to right, var(--marker) 1px, transparent 1px),
+			linear-gradient(to right, var(--line) 1px, transparent 1px);
+		background-position:
+			0 0,
+			0 0;
+		background-repeat: repeat-x;
+		background-size:
+			80px 7px,
+			16px 4px;
 	}
 
-	.theme-toggle {
-		display: grid;
-		place-items: center;
-		width: 2rem;
-		height: 2rem;
-		padding: 0;
-		border: 1px solid var(--border);
-		border-radius: 0.4rem;
-		background: none;
-		color: var(--text-muted);
-		cursor: pointer;
+	.ruler span {
+		position: absolute;
+		top: 1px;
+		padding-left: 4px;
+		color: var(--marker);
+		font-family: var(--font-mono);
+		font-size: 0.5625rem;
+		line-height: 1;
+		opacity: 0.7;
 	}
 
-	.theme-toggle:hover {
-		color: var(--text);
-	}
+	@media (min-width: 40rem) {
+		.name {
+			display: inline;
+		}
 
-	.theme-toggle svg {
-		width: 1rem;
-		height: 1rem;
-		fill: none;
-		stroke: currentColor;
-		stroke-width: 2;
-		stroke-linecap: round;
-		stroke-linejoin: round;
-	}
-
-	:global([data-theme='dark']) .sun,
-	:global([data-theme='light']) .moon {
-		display: none;
-	}
-
-	@media (max-width: 30rem) {
 		nav {
-			order: 3;
-			width: 100%;
+			gap: 1.5rem;
 		}
 	}
 </style>

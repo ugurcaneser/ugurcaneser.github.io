@@ -1,28 +1,36 @@
+/*
+ * Dark only. The look is a self-healing cutting mat: deep green with a
+ * 16px grid (the tile size of the games written about here), heavier lines
+ * every 5 cells, and yellow mat markings for the one accent.
+ * Mobile first: base rules are for phones, wider screens add to them.
+ */
+
 :root {
-	--font-sans: var(--font-inter), system-ui, sans-serif;
+	--mat: #0f1f1b;
+	--mat-raised: #142722;
+	--line: #23403a;
+	--chalk: #e4ece7;
+	--sage: #8da69c;
+	--marker: #f2c94c;
+
+	--grid-minor: rgb(228 236 231 / 0.03);
+	--grid-major: rgb(228 236 231 / 0.06);
+
+	--font-display: var(--font-big-shoulders), 'Arial Narrow', sans-serif;
+	--font-body: var(--font-atkinson), system-ui, sans-serif;
 	--font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
 
-	--bg: #ffffff;
-	--bg-subtle: #f5f5f4;
-	--text: #1c1917;
-	--text-muted: #6b6560;
-	--border: #e7e5e4;
-	--accent: #dc2626;
-	--accent-hover: #991b1b;
+	--gutter: 1rem;
+	--measure: 42rem;
+	--header-height: 3.5rem;
 
-	--content-width: 44rem;
-	color-scheme: light;
+	color-scheme: dark;
 }
 
-:root[data-theme='dark'] {
-	--bg: #0f0f10;
-	--bg-subtle: #1b1b1e;
-	--text: #e7e5e4;
-	--text-muted: #a19c97;
-	--border: #2a2a2e;
-	--accent: #f87171;
-	--accent-hover: #fca5a5;
-	color-scheme: dark;
+@media (min-width: 48rem) {
+	:root {
+		--gutter: 2rem;
+	}
 }
 
 *,
@@ -33,49 +41,153 @@
 
 html {
 	-webkit-text-size-adjust: 100%;
+	scroll-padding-top: calc(var(--header-height) + 1.5rem);
 }
 
 body {
 	margin: 0;
-	background: var(--bg);
-	color: var(--text);
-	font-family: var(--font-sans);
+	background-color: var(--mat);
+	background-image:
+		linear-gradient(to right, var(--grid-major) 1px, transparent 1px),
+		linear-gradient(to bottom, var(--grid-major) 1px, transparent 1px),
+		linear-gradient(to right, var(--grid-minor) 1px, transparent 1px),
+		linear-gradient(to bottom, var(--grid-minor) 1px, transparent 1px);
+	background-size:
+		80px 80px,
+		80px 80px,
+		16px 16px,
+		16px 16px;
+	color: var(--chalk);
+	font-family: var(--font-body);
 	font-size: 1.0625rem;
-	line-height: 1.7;
+	line-height: 1.65;
 	-webkit-font-smoothing: antialiased;
 }
 
+@media (min-width: 64rem) {
+	body {
+		font-size: 1.125rem;
+	}
+}
+
+::selection {
+	background: var(--marker);
+	color: var(--mat);
+}
+
 a {
-	color: var(--accent);
+	color: inherit;
+	text-decoration-color: var(--marker);
 	text-decoration-thickness: 1px;
 	text-underline-offset: 0.2em;
 }
 
 a:hover {
-	color: var(--accent-hover);
+	color: var(--marker);
 }
 
-.container {
-	width: 100%;
-	max-width: var(--content-width);
+:focus-visible {
+	outline: 2px solid var(--marker);
+	outline-offset: 3px;
+	border-radius: 2px;
+}
+
+/* ---- Page grid -------------------------------------------------------- */
+/* Every page fills three areas: head (title), rail (secondary info) and
+   body. Phones stack them in that order; from 64rem the rail becomes a
+   sticky column on the left. */
+
+.page {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	grid-template-areas: 'head' 'rail' 'body';
+	align-content: start;
+	row-gap: 2rem;
+	max-width: 82rem;
 	margin: 0 auto;
-	padding: 0 1rem;
+	padding: 2.5rem var(--gutter) 0;
+}
+
+.page-head {
+	grid-area: head;
+}
+
+.page-rail {
+	grid-area: rail;
+}
+
+.page-body {
+	grid-area: body;
+	min-width: 0;
+}
+
+/* Rails that only add context go after the body on phones. */
+.page:has(> .rail-after) {
+	grid-template-areas: 'head' 'body' 'rail';
+}
+
+@media (min-width: 64rem) {
+	.page {
+		grid-template-columns: 15rem minmax(0, 1fr);
+		column-gap: 4rem;
+		row-gap: 3rem;
+		padding-top: 4rem;
+	}
+
+	.page,
+	.page:has(> .rail-after) {
+		grid-template-areas: 'rail head' 'rail body';
+	}
+
+	.page-rail {
+		position: sticky;
+		top: calc(var(--header-height) + 2rem);
+		align-self: start;
+		max-height: calc(100vh - var(--header-height) - 4rem);
+		overflow-y: auto;
+		scrollbar-width: thin;
+	}
+}
+
+/* ---- Type ------------------------------------------------------------- */
+
+.display {
+	margin: 0;
+	font-family: var(--font-display);
+	font-size: clamp(2.75rem, 1.6rem + 5vw, 5rem);
+	font-weight: 800;
+	line-height: 0.92;
+	letter-spacing: 0.005em;
+	text-wrap: balance;
+}
+
+.lede {
+	max-width: var(--measure);
+	margin: 1rem 0 0;
+	color: var(--sage);
+	font-size: 1.125rem;
+	text-wrap: pretty;
+}
+
+@media (min-width: 64rem) {
+	.lede {
+		font-size: 1.25rem;
+	}
+}
+
+/* Small technical labels: dates, counts, section names in the rail. */
+.label {
+	margin: 0;
+	color: var(--sage);
+	font-family: var(--font-mono);
+	font-size: 0.75rem;
+	font-weight: 400;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
 }
 
 .muted {
-	color: var(--text-muted);
-}
-
-.page-title {
-	margin: 2.5rem 0 0.5rem;
-	font-size: 2rem;
-	line-height: 1.2;
-	letter-spacing: -0.02em;
-}
-
-.page-description {
-	margin: 0 0 2rem;
-	color: var(--text-muted);
+	color: var(--sage);
 }
 
 .visually-hidden {
@@ -87,11 +199,12 @@ a:hover {
 	white-space: nowrap;
 }
 
-/* Tag chips */
+/* ---- Tags ------------------------------------------------------------- */
+
 .tags {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 0.4rem;
+	gap: 0.375rem;
 	margin: 0;
 	padding: 0;
 	list-style: none;
@@ -99,38 +212,65 @@ a:hover {
 
 .tag {
 	display: inline-block;
-	padding: 0.05rem 0.55rem;
-	border: 1px solid var(--border);
-	border-radius: 999px;
-	color: var(--text-muted);
-	font-size: 0.8rem;
+	padding: 0.2rem 0.5rem;
+	border: 1px solid var(--line);
+	border-radius: 0.25rem;
+	background: var(--mat);
+	color: var(--sage);
+	font-family: var(--font-mono);
+	font-size: 0.75rem;
+	line-height: 1.4;
 	text-decoration: none;
 }
 
 .tag:hover {
-	border-color: var(--accent);
-	color: var(--accent);
+	border-color: var(--marker);
+	color: var(--marker);
 }
 
-/* Long-form post content */
+/* ---- Post content ----------------------------------------------------- */
+/* Text keeps a reading measure; code blocks and images may use the rest of
+   the column, so long lines (e.g. ASCII level maps) fit on wide screens. */
+
 .prose {
 	overflow-wrap: break-word;
 }
 
+.prose > * {
+	max-width: var(--measure);
+}
+
+.prose > .expressive-code,
+.prose > p:has(> img:only-child) {
+	max-width: none;
+}
+
+.prose > :first-child {
+	margin-top: 0;
+}
+
 .prose h2,
-.prose h3,
-.prose h4 {
-	margin: 2.2em 0 0.6em;
-	line-height: 1.3;
-	letter-spacing: -0.01em;
+.prose h3 {
+	margin: 2.5em 0 0.5em;
+	font-family: var(--font-display);
+	font-weight: 700;
+	line-height: 1.05;
+	letter-spacing: 0.01em;
+	text-wrap: balance;
 }
 
 .prose h2 {
-	font-size: 1.5rem;
+	font-size: 2rem;
 }
 
 .prose h3 {
-	font-size: 1.2rem;
+	font-size: 1.5rem;
+}
+
+@media (min-width: 64rem) {
+	.prose h2 {
+		font-size: 2.375rem;
+	}
 }
 
 .prose p,
@@ -138,49 +278,55 @@ a:hover {
 .prose ol,
 .prose blockquote,
 .prose table {
-	margin: 0 0 1.2em;
+	margin: 0 0 1.25em;
+}
+
+.prose ul,
+.prose ol {
+	padding-left: 1.25em;
 }
 
 .prose li + li {
-	margin-top: 0.3em;
+	margin-top: 0.4em;
+}
+
+.prose li::marker {
+	color: var(--marker);
+}
+
+.prose strong {
+	font-weight: 700;
 }
 
 .prose img {
+	display: block;
 	max-width: 100%;
 	height: auto;
-	border-radius: 0.5rem;
+	border: 1px solid var(--line);
+	border-radius: 0.375rem;
 }
 
 .prose blockquote {
 	padding-left: 1rem;
-	border-left: 3px solid var(--border);
-	color: var(--text-muted);
+	border-left: 2px solid var(--marker);
+	color: var(--sage);
 }
 
 .prose :not(pre) > code {
 	padding: 0.1em 0.35em;
-	border-radius: 0.3rem;
-	background: var(--bg-subtle);
+	border: 1px solid var(--line);
+	border-radius: 0.25rem;
+	background: var(--mat-raised);
 	font-family: var(--font-mono);
-	font-size: 0.875em;
+	font-size: 0.85em;
 }
 
 .prose .expressive-code {
-	margin: 1.5em 0;
-}
-
-/* On wide screens code blocks and images break out of the text column, so
-   long lines (e.g. ASCII level maps) fit without scrolling. */
-@media (min-width: 58rem) {
-	.prose .expressive-code,
-	.prose p:has(> img:only-child) {
-		margin-inline: -3.5rem;
-	}
+	margin: 1.75em 0;
 }
 
 .prose table {
 	display: block;
-	width: 100%;
 	overflow-x: auto;
 	border-collapse: collapse;
 	font-size: 0.95rem;
@@ -189,12 +335,27 @@ a:hover {
 .prose th,
 .prose td {
 	padding: 0.5rem 0.75rem;
-	border: 1px solid var(--border);
+	border: 1px solid var(--line);
 	text-align: left;
 }
 
+.prose th {
+	font-family: var(--font-mono);
+	font-size: 0.8rem;
+	font-weight: 600;
+}
+
 .prose hr {
-	margin: 2.5em 0;
+	margin: 3em 0;
 	border: 0;
-	border-top: 1px solid var(--border);
+	border-top: 1px solid var(--line);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	a,
+	.tag {
+		transition:
+			color 120ms ease,
+			border-color 120ms ease;
+	}
 }

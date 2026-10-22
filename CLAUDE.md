@@ -38,11 +38,13 @@ Schemas are in `src/content.config.ts`; helpers in `src/lib/content.ts`.
 - **Post images** shared by both language versions go in `src/assets/posts/<project>/` and are referenced relatively (`../../../assets/posts/<project>/x.png`) so `astro:assets` optimizes them.
 - Posts about the user's other projects are written with the user-level `tech-blog` skill (`~/.claude/skills/tech-blog/SKILL.md`), which covers research, verification and the hand-over.
 
-### Code blocks and theming
+### Design and layout
 
-- Expressive Code (`astro-expressive-code`, configured in `astro.config.mjs`, must stay before `mdx()`) handles all fenced code: titles (`title="..."`), line markers (`{3-5}`, `ins=`, `del=`), copy button, terminal frames.
-- Dark mode is a `data-theme="light|dark"` attribute on `<html>`, set by an inline script in `Base.astro` (localStorage, then `prefers-color-scheme`) and toggled in `Header.astro`. Expressive Code is tied to the same attribute via `themeCssSelector`, so don't switch it to media-query-based theming.
-- Colors are CSS custom properties in `src/styles/global.css` (`:root` and `:root[data-theme='dark']`); components use scoped `<style>` blocks referencing those tokens. Fonts (Inter, JetBrains Mono) come from Astro's fonts API (Fontsource provider) as `--font-inter` / `--font-jetbrains-mono`.
+- **Dark only**, no theme toggle. The look is a cutting mat: green `--mat` background with a 16px grid (heavier every 5 cells), a ruler under the sticky header, and yellow `--marker` as the single accent. Tokens live in `:root` in `src/styles/global.css`; the code block colors in `astro.config.mjs` repeat a few of them, so change both together.
+- Fonts via Astro's fonts API (Fontsource): Big Shoulders Display for display headings (`.display`, prose `h2`/`h3`), Atkinson Hyperlegible Next for body text, JetBrains Mono for code and the small uppercase `.label` text (dates, nav, rail headings).
+- **Mobile first**: base CSS targets phones; `48rem` and `64rem` are the breakpoints. Every page puts its content in three areas of `main.page`: `.page-head` (title), `.page-rail` (secondary info) and `.page-body`. Phones stack head, rail, body (add `.rail-after` to the rail to put it after the body); from `64rem` the rail is a sticky left column. On post pages the rail holds the meta, tags and a table of contents built from the `h2`s, with the current section highlighted.
+- In `.prose`, text keeps a ~42rem measure while code blocks and standalone images use the full column width, so long code lines (e.g. ASCII maps) fit on wide screens.
+- Expressive Code (`astro-expressive-code`, configured in `astro.config.mjs`, must stay before `mdx()`) handles all fenced code with the `everforest-dark` theme: titles (`title="..."`), line markers (`{3-5}`, `ins=`, `del=`), copy button, terminal frames.
 
 ### Must not break
 

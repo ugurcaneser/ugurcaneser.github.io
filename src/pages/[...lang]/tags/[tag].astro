@@ -1,6 +1,6 @@
 ---
 import PostList from '../../../components/PostList.astro';
-import { type Lang, langParam, langs, useTranslations } from '../../../i18n';
+import { type Lang, langParam, langs, localizePath, useTranslations } from '../../../i18n';
 import Base from '../../../layouts/Base.astro';
 import { collectTags, getPosts, tagSlug, tagUrl } from '../../../lib/content';
 
@@ -42,13 +42,24 @@ for (const other of langs.filter((l) => l !== lang)) {
 ---
 
 <Base lang={lang} title={t('tags.tagged', { tag: name })} translations={translations}>
-	<h1 class="page-title">{t('tags.tagged', { tag: name })}</h1>
-	<div class="spacer"></div>
-	<PostList lang={lang} posts={posts} />
+	<header class="page-head">
+		<p class="label">{t('nav.tags')}</p>
+		<h1 class="display">{name}</h1>
+	</header>
+	<aside class="page-rail rail-after">
+		<a class="label" href={localizePath(lang, '/tags/')}>← {t('tags.all')}</a>
+	</aside>
+	<div class="page-body">
+		<PostList lang={lang} posts={posts} />
+	</div>
 </Base>
 
 <style>
-	.spacer {
-		height: 1.5rem;
+	.page-head .label {
+		margin-bottom: 0.75rem;
+	}
+
+	.page-rail a {
+		text-decoration: none;
 	}
 </style>

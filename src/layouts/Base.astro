@@ -29,19 +29,8 @@ const alternates = { ...translations, [lang]: Astro.url.pathname } as Partial<Re
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width,initial-scale=1" />
-		<script is:inline>
-			// Runs before paint so the page never flashes the wrong theme.
-			(() => {
-				let theme;
-				try {
-					theme = localStorage.getItem('theme');
-				} catch {}
-				if (theme !== 'light' && theme !== 'dark') {
-					theme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-				}
-				document.documentElement.dataset.theme = theme;
-			})();
-		</script>
+		<meta name="theme-color" content="#0f1f1b" />
+		<meta name="color-scheme" content="dark" />
 
 		<title>{fullTitle}</title>
 		<meta name="description" content={metaDescription} />
@@ -82,12 +71,13 @@ const alternates = { ...translations, [lang]: Astro.url.pathname } as Partial<Re
 		}
 		<meta name="twitter:card" content="summary" />
 
-		<Font cssVariable="--font-inter" preload />
+		<Font cssVariable="--font-big-shoulders" preload />
+		<Font cssVariable="--font-atkinson" preload />
 		<Font cssVariable="--font-jetbrains-mono" />
 	</head>
 	<body>
 		<Header lang={lang} translations={translations} />
-		<main class="container">
+		<main class="page">
 			<slot />
 		</main>
 		<Footer lang={lang} />

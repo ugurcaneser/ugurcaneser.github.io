@@ -9,7 +9,11 @@ const tr = useTranslations('tr');
 ---
 
 <Base lang="en" title={en('404.title')}>
-	<h1 class="page-title">404</h1>
-	<p>{en('404.body')} <a href="/">{en('404.home')}</a></p>
-	<p lang="tr">{tr('404.body')} <a href="/tr/">{tr('404.home')}</a></p>
+	<header class="page-head">
+		<h1 class="display">404</h1>
+	</header>
+	<div class="page-body">
+		<p>{en('404.body')} <a href="/">{en('404.home')}</a></p>
+		<p lang="tr">{tr('404.body')} <a href="/tr/">{tr('404.home')}</a></p>
+	</div>
 </Base>

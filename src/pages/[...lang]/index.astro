@@ -1,18 +1,56 @@
 ---
 import PostList from '../../components/PostList.astro';
-import { langFromParam, langPaths, useTranslations } from '../../i18n';
+import ProjectLinks from '../../components/ProjectLinks.astro';
+import { langFromParam, langPaths, localizePath, useTranslations } from '../../i18n';
 import Base from '../../layouts/Base.astro';
-import { getPosts } from '../../lib/content';
+import { getPosts, getProjects } from '../../lib/content';
 
 export const getStaticPaths = langPaths;
 
 const lang = langFromParam(Astro.params.lang);
 const t = useTranslations(lang);
 const posts = await getPosts(lang);
+const projects = await getProjects();
 ---
 
 <Base lang={lang} translations={{ en: '/', tr: '/tr/' }}>
-	<h1 class="page-title">{t('nav.posts')}</h1>
-	<p class="page-description">{t('home.intro')}</p>
-	<PostList lang={lang} posts={posts} />
+	<header class="page-head">
+		<h1 class="display">{t('nav.posts')}</h1>
+		<p class="lede">{t('home.intro')}</p>
+	</header>
+	<aside class="page-rail rail-after rail">
+		<h2 class="label">{t('home.projects')}</h2>
+		<ProjectLinks lang={lang} projects={projects} />
+		<a class="label rss" href={localizePath(lang, '/rss.xml')}>{t('footer.rss')} ↗</a>
+	</aside>
+	<div class="page-body">
+		<PostList lang={lang} posts={posts} />
+	</div>
 </Base>
+
+<style>
+	.rail {
+		display: grid;
+		gap: 0.875rem;
+		padding: 1rem;
+		border: 1px solid var(--line);
+		border-radius: 0.375rem;
+		background: var(--mat);
+	}
+
+	.rss {
+		text-decoration: none;
+	}
+
+	@media (min-width: 64rem) {
+		.rail {
+			padding: 0;
+			border: 0;
+			background: none;
+		}
+
+		.rss {
+			margin-top: 0.5rem;
+		}
+	}
+</style>
