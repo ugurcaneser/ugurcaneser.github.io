@@ -48,4 +48,4 @@ Deliberately minimal: keep it that way unless asked.
 
 ### Must not break
 
-App privacy/support pages that were given to Apple live in **separate repos** served as GitHub Pages project sites: `/budgetory-legal/` and `/pizza-assassin-site/` (incl. `/privacy/`, `/support/`). Never create top-level routes with those names, and don't add a custom domain (`CNAME`) to this site — that would change those URLs.
+App privacy/support pages that were given to Apple live in **separate repos** served as GitHub Pages project sites: `/budgetory-legal/`, `/pizza-assassin-site/`, `/hexsmith-site/` and `/scrap-baron-site/` (incl. `/privacy/`, `/support/`; Scrap Baron also `/terms/` and `/licenses/`). Never create top-level routes with those names, and don't add a custom domain (`CNAME`) to this site — that would change those URLs.
